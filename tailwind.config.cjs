@@ -1,4 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+const rotateX = plugin(function ({ addUtilities }) {
+    addUtilities({
+        '.rotate-y-180': {
+            transform: 'rotateY(180deg)',
+        },
+    });
+});
 module.exports = {
     content: [
         './components/**/*.{js,vue,ts}',
@@ -63,7 +71,7 @@ module.exports = {
                 },
             },
             fontFamily: {
-                nunito: ['Nunito', 'sans-serif'],
+                Inter: ["Inter", "sans-serif"],
             },
             spacing: {
                 4.5: '18px',
@@ -94,6 +102,8 @@ module.exports = {
         require('@tailwindcss/forms')({
             strategy: 'class',
         }),
+
         require('@tailwindcss/typography'),
+        rotateX,
     ],
 };

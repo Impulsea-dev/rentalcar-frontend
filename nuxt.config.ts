@@ -1,8 +1,7 @@
 export default defineNuxtConfig({
     app: {
         head: {
-            title: 'Tailwind Template',
-            titleTemplate: '%s',
+            title: 'Economy Rental Car', 
             htmlAttrs: {
                 lang: 'en',
             },
@@ -16,7 +15,7 @@ export default defineNuxtConfig({
                 { name: 'format-detection', content: 'telephone=no' },
             ],
             link: [
-                { rel: 'icon', type: 'image/x-icon', href: '/favicon.svg' },
+                { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
                 {
                     rel: 'stylesheet',
                     href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap',
@@ -32,20 +31,9 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt', '@nuxtjs/i18n'],
+    modules: ['@pinia/nuxt'],
 
-    i18n: {
-        locales: [
-             { code: 'en', file: 'en.json' },
-            ],
-        lazy: true,
-        defaultLocale: 'en',
-        strategy: 'no_prefix',
-        langDir: 'locales/',
-    },
-    vite: {
-        optimizeDeps: { include: ['quill'] },
-    },
+     
     router: {
         options: { linkExactActiveClass: 'active' },
     },

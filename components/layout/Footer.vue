@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-auto p-6 text-center dark:text-white-dark ltr:sm:text-left rtl:sm:text-right">
-        © {{ new Date().getFullYear() }}. Rentals All rights reserved.
+    <div class="dark:text-white-dark text-center ltr:sm:text-left rtl:sm:text-right p-6 pt-0 mt-auto">
+        © {{ new Date().getFullYear() }}. Economy Rental All rights reserved.
     </div>
 </template>
