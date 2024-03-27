@@ -8,19 +8,7 @@
                 @click="store.toggleSidebar()"></div>
 
             <!-- screen loader -->
-            <div v-show="store.isShowMainLoader"
-                class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#060818]">
-                <div id="loading-bg">
-                    <div class="loading-logo">
-                        <img src="/assets/images/logo.png" alt="Logo" />
-                    </div>
-                    <div class="loading">
-                        <div class="effect-1 effects"></div>
-                        <div class="effect-2 effects"></div>
-                        <div class="effect-3 effects"></div>
-                    </div>
-                </div>
-            </div>
+
 
 
             <div class="fixed bottom-6 z-50 ltr:right-6 rtl:left-6">
@@ -43,7 +31,7 @@
 
             <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[store.navbar]">
                 <!--  BEGIN SIDEBAR  -->
-                <layout-sidebar />
+                <!-- <layout-sidebar /> -->
                 <!--  END SIDEBAR  -->
 
                 <div class="main-content flex min-h-screen flex-col">
@@ -52,7 +40,7 @@
                     <!--  END TOP NAVBAR  -->
 
                     <!--  BEGIN CONTENT AREA  -->
-                    <div class="animation p-6">
+                    <div class="animation flex-grow">
                         <NuxtPage />
                     </div>
                     <!--  END CONTENT AREA  -->

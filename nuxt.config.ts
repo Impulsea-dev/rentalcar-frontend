@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
     app: {
         head: {
-            title: 'Economy Rental Car', 
+            title: 'Economy Rental Car',
             htmlAttrs: {
                 lang: 'en',
             },
@@ -18,10 +18,14 @@ export default defineNuxtConfig({
                 { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
                 {
                     rel: 'stylesheet',
-                    href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap',
+                    href: 'https://fonts.googleapis.com/css2?family=ABeeZee&display=swap',
                 },
             ],
         },
+        pageTransition: { name: 'page', mode: 'out-in' },
+    },
+    build: {
+        transpile: ['vue3-form-wizard']
     },
 
     css: ['~/assets/css/app.css'],
@@ -31,9 +35,9 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt'],
+    modules: ['@pinia/nuxt', 'nuxt-headlessui', 'maz-ui/nuxt'],
 
-     
+
     router: {
         options: { linkExactActiveClass: 'active' },
     },
