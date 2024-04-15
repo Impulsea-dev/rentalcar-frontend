@@ -35,7 +35,8 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt', 'nuxt-headlessui', 'maz-ui/nuxt'],
+    modules: ['@pinia/nuxt', 'nuxt-headlessui'],
+    plugins: ['vue-tel-input'],
 
 
     router: {

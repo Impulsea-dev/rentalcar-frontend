@@ -20,7 +20,15 @@
             </div>
             <div>
                 <label for="phone" class="block text-base italic font-medium">Phone</label>
-                <MazPhoneNumberInput :default-country-code="countrycode" v-model="formData.phone" />
+                <client-only>
+                    <vue-tel-input v-if="countrycode" v-model="formData.phone" @validate="phoneObject"
+                        :mode="'international'" :defaultCountry="countrycode.trim()"
+                        :invalidMsg="'Please enter a valid phone number'" validCharactersOnly
+                        class="p-1.5 !rounded !border !border-black" :dropdownOptions="{
+                    disabled: false, showDialCodeInList: false, showDialCodeInSelection: false,
+                    showFlags: true, showSearchBox: true, tabindex: 0
+                }"></vue-tel-input>
+                </client-only>
             </div>
             <div>
                 <label for="country" class="block text-base italic font-medium">Country</label>
@@ -40,7 +48,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { getAllCountries, getCurrentCountry } from "~/utils/"
-import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput'
 const instance = getCurrentInstance();
 const formData = ref({
     fname: null,
@@ -52,10 +59,13 @@ const formData = ref({
 });
 const countries = ref(null)
 const countrycode = ref(null)
-
+const phoneObject = (object) => {
+    // console.log(object);
+    // this.isValid = object.valid;
+}
 
 watch(formData.value, () => {
-    const isFormComplete = Object.values(formData.value).every(value => value !== null);
+    const isFormComplete = Object.values(formData.value).every(value => value !== null && value !== "");
     isFormComplete ? instance.emit('form-changed', isFormComplete) : null
 });
 const allCountries = () => {

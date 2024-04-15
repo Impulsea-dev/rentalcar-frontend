@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row justify-center items-end gap-4 bg-white/80 py-6 px-4 rounded-lg mx-10">
+    <div class="flex flex-row justify-center items-end gap-4 bg-white/80 py-6 px-4 rounded-lg mx-4 md:mx-10 flex-wrap">
         <div class="flex flex-col gap-1 items-start">
             <div> Pick-up location</div>
             <div class="relative">

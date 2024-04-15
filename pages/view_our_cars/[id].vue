@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="flex flex-col my-20 px-5 md:px-10 lg:px-20">
+        <section class="flex flex-col py-24 md:py-32 px-5 md:px-10 lg:px-20">
             <HeroAnimation>
                 <div class="flex flex-col items-center gap-10 mb-14">
                     <span class="text-2xl md:text-5xl italic">Our Impressive Collection of Cars</span>
@@ -20,21 +20,24 @@
             </div>
 
             <transition name="fade" mode="out-in">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10"
-                    :key="currentPage">
-                    <CarItem v-for="car in currentPageCars()" :car="car" />
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" :key="currentPage">
+                    <CarItem v-for="car in currentPageCars" :car="car" :key="car.name" />
                 </div>
             </transition>
-            <div class="flex justify-center">
-                <vue-awesome-paginate :total-items="cars.length" :items-per-page="itemsPerPage" :max-pages-shown="5"
-                    v-model="currentPage" />
+            <div class="flex justify-between items-center py-20">
+                <vue-awesome-paginate :total-items="totalCars" :items-per-page="itemsPerPage" :max-pages-shown="5"
+                    v-model="currentPage" @click="goToPage" :hide-prev-next="true" />
+                <span class="text-base">
+                    Page {{ currentPage }} of {{ totalPages }}
+                </span>
             </div>
         </section>
 
     </div>
 </template>
 <script setup>
-import card3 from "../assets/images/car3.svg";
+const route = useRoute()
+import card3 from "~/assets/images/car3.svg";
 const cars = ref([{
     name: 'BMW i8',
     price: 90,
@@ -94,6 +97,23 @@ const cars = ref([{
     image: card3
 }])
 
+const currentPage = ref(parseInt(route.params.id || 1));
+const itemsPerPage = ref(4);
+
+const totalCars = computed(() => cars.value.length);
+const totalPages = computed(() => Math.ceil(totalCars.value / itemsPerPage.value));
+
+const currentPageCars = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+    const endIndex = Math.min(startIndex + itemsPerPage.value, cars.value.length);
+    return cars.value.slice(startIndex, endIndex);
+});
+
+const goToPage = (page) => {
+    currentPage.value = page;
+    navigateTo(`/view_our_cars/${page}`);
+};
+
 const collections = ref([
     { id: 0, name: 'All' },
 ])
@@ -101,19 +121,6 @@ const collections = ref([
 const handleSelectedCollection = (newSelected) => {
     console.log(newSelected);
 };
-
-const currentPage = ref(1);
-const itemsPerPage = ref(6);
-const currentPageCars = () => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-    const endIndex = Math.min(startIndex + itemsPerPage.value, cars.value.length);
-    return cars.value.slice(startIndex, endIndex);
-};
-watch(currentPage, () => {
-    currentPage.value += 1;
-    currentPage.value -= 1;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
 </script>
 <style>
 .pagination-container {
@@ -136,13 +143,13 @@ watch(currentPage, () => {
 }
 
 .active-page {
-    background-color: #3498db;
-    border: 1px solid #3498db;
+    background-color: black;
+    border: 1px solid black;
     color: white;
 }
 
 .active-page:hover {
-    background-color: #2988c8;
+    background-color: #010101;
 }
 
 .fade-enter-active,

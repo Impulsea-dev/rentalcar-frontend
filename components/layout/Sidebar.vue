@@ -1,4 +1,58 @@
 <template>
+    <div>
+        <button @click="toggleSidebar" class="text-2xl text-white">
+            &#9776;
+        </button>
+        <div v-if="sidebarOpen" @click="toggleSidebar" class="fixed inset-0 backdrop-filter backdrop-blur-sm"></div>
+
+        <aside :class="{ 'translate-x-0': sidebarOpen, 'translate-x-full': !sidebarOpen }"
+            class="fixed inset-y-0 right-0 bg-black bg-opacity-90 w-64 md:w-[360px] px-10 transition-transform ease-in-out duration-500">
+            <!-- Contenido del Sidebar -->
+            <nav class="flex flex-col gap-6 my-20 text-xl md:text-2xl font-bold hover:cursor-pointer">
+                <NuxtLink to="/login" class="text-white hover:opacity-50" @click="handleLinkClick">Login/Register
+                </NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50">Home</NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50" @click="handleLinkClick">About Us</NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50" @click="handleLinkClick">Rental Cars</NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50" @click="handleLinkClick">FAQ</NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50" @click="handleLinkClick">Blog</NuxtLink>
+                <NuxtLink class="text-white hover:opacity-50" @click="handleLinkClick">Contact Us</NuxtLink>
+            </nav>
+            <nav class="flex flex-row gap-2">
+                <a href="" target="_blank">
+                    <iconInstagram class="text-white size-5 md:size-6 hover:opacity-50 cursor-pointer" />
+
+                </a>
+                <a href="" target="_blank">
+                    <IconFacebook class="text-white size-5 md:size-6 hover:opacity-50 cursor-pointer" />
+                </a>
+                <a href="" target="_blank">
+                    <iconTwitter class="text-white size-5 md:size-6 hover:opacity-50 cursor-pointer" />
+                </a>
+                <a href="" target="_blank">
+                    <IconYoutube class="text-white size-5 md:size-6 hover:opacity-50 cursor-pointer" />
+                </a>
+            </nav>
+        </aside>
+    </div>
+</template>
+
+<script setup>
+
+const sidebarOpen = ref(false)
+const toggleSidebar = () => {
+    sidebarOpen.value = !sidebarOpen.value
+}
+
+const handleLinkClick = () => {
+    // if (window.innerWidth < 768) {
+    sidebarOpen.value = false
+    // }
+}
+</script>
+
+
+<!-- <template>
     <div :class="{ 'dark text-white-dark': store.semidark }">
         <nav
             class="sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300">
@@ -57,4 +111,4 @@ const toggleMobileMenu = () => {
         store.toggleSidebar();
     }
 };
-</script>
+</script> -->

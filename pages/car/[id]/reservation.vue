@@ -1,7 +1,6 @@
 <template>
-    <div class="px-10 py-10" st>
-        <form-wizard @on-complete="onComplete" color="#000" step-size="sm" back-button-text="Go back"
-            next-button-text="Go Location" finish-button-text="Complete Reservation">
+    <div class="px-0 py-24 md:py-32">
+        <form-wizard @on-complete="onComplete" color="#000" step-size="sm" finish-button-text="Complete Reservation">
             <tab-content title="User Information" :before-change="goTabLocation">
                 <ReservationForm @form-changed="updateFormCompletion" />
             </tab-content>
@@ -11,6 +10,24 @@
             <tab-content title="Reservation">
                 Yuhuuu! This seems pretty damn simple
             </tab-content>
+            <template #prev>
+                <button class="my-custom-button mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base italic bg-black text-white transition-all
+                 duration-300 hover:bg-black/90">
+                    <IconArrowLeft />
+                    Go Back
+                </button>
+            </template>
+            <template #next>
+                <button class="my-custom-button mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base italic bg-black text-white transition-all
+                 duration-300 hover:bg-black/90">Next
+                    <iconRight />
+                </button>
+            </template>
+            <template #finish>
+                <button class="my-custom-button mt-4 rounded-full px-4 py-3 text-base italic bg-black text-white transition-all
+                 duration-300 hover:bg-black/90">Complete Reservation
+                </button>
+            </template>
         </form-wizard>
     </div>
 </template>
