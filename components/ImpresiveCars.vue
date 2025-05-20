@@ -2,18 +2,16 @@
     <div>
         <section class="flex flex-col items-center justify-center bg-[#F5F5F5] text-black">
             <div class="flex flex-col items-center gap-10 my-20 md:my-40 px-4">
-                <span class="text-3xl md:text-5xl text-center italic">Our Impressive Collection of Cars</span>
+                <span class="text-3xl md:text-5xl text-center">Our Impressive Collection of Cars</span>
                 <span class="text-lg max-w-3xl text-center">Ranging from elegant sedans to powerful sports cars, all
                     carefully selected to provide our customers with the ultimate driving experience.</span>
-
                 <div class="overflow-auto h-16 w-[22rem] sm:w-[36rem] md:w-auto">
                     <div class="flex flex-row gap-x-3 md:gap-x-6">
-                        <span class="text-base md:text-lg italic text-black bg-white rounded-full px-5 py-3
-                     hover:text-white hover:bg-black hover:cursor-pointer transition-all duration-300
+                        <span class="text-base md:text-lg text-black bg-white font-normal rounded-full px-5 py-3
+                     hover:text-white hover:bg-primary hover:cursor-pointer transition-all duration-300
                      whitespace-nowrap" v-for="tab in tabs">{{ tab }}</span>
                     </div>
                 </div>
-
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                     <CarItem v-for="car in cars" :car="car" />
@@ -24,7 +22,7 @@
                     <iconRight />
                 </NuxtLink> -->
                 <ButtonGeneric :to="'/view_our_cars/1'"
-                    :class="'px-10 py-4 text-sm md:text-base italic bg-white !border-none'">
+                    :class="'px-10 py-4 text-sm md:text-base bg-white !border-none font-normal'">
                     <div class="flex items-center gap-x-2">
                         See All Cars
                         <iconRight />

@@ -3,14 +3,14 @@
         <div class="flex flex-col gap-y-10">
             <span class="text-3xl font-bold">{{ route.params.id }}</span>
             <img src="~/assets/images/carpage.svg" class="hover:scale-110 transition-transform duration-300" alt="">
-            <div class="bg-black p-4 rounded-xl">
-                <div class="flex justify-between text-white">
-                    <span class="text-xl">day</span>
-                    <span class="text-xl">$300</span>
+            <div class="bg-white border-[1.5px] border-black p-4 rounded">
+                <div class="flex justify-between text-black">
+                    <span class="text-xl">Day</span>
+                    <span class="text-xl font-medium">$300</span>
                 </div>
-                <div class="flex justify-between text-white">
-                    <span class="text-xl">month</span>
-                    <span class="text-xl">$1300</span>
+                <div class="flex justify-between text-black">
+                    <span class="text-xl">Month</span>
+                    <span class="text-xl font-medium">$1300</span>
                 </div>
             </div>
         </div>
@@ -42,8 +42,8 @@
                 <li>Traction Control</li>
                 <li>Stability Control</li>
             </ul>
-            <NuxtLink to="reservation" class="mt-4 flex justify-center items-center gap-x-2 rounded-full w-40 px-6 py-3 text-base italic bg-black text-white transition-all
-                 duration-300 hover:bg-black/90">
+            <NuxtLink to="reservation" class="mt-4 flex justify-center items-center gap-x-2 rounded-full w-40 px-6 py-3 text-base
+             bg-primary text-white transition-all duration-300 hover:bg-primary-dark-light">
                 Reserve
                 <iconRight />
             </NuxtLink>

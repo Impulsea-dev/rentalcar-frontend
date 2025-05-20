@@ -1,8 +1,8 @@
 <template>
     <footer
-        class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-y-4 py-10 px-4 md:px-20 bg-black">
+        class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-y-4 py-10 px-4 md:px-20 bg-background">
         <NuxtLink to="/">
-            <img src="../../logo.svg" alt="" class="w-[171px] h-6">
+            <!-- <img src="../../logo.svg" alt="" class="w-[171px] h-8"> -->
         </NuxtLink>
         <nav class="flex gap-x-6 flex-wrap justify-center">
             <NuxtLink to="/" class="text-white text-sm hidden md:block">Home</NuxtLink>

@@ -25,13 +25,13 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#4361ee',
-                    light: '#eaf1ff',
-                    'dark-light': 'rgba(67,97,238,.15)',
+                    DEFAULT: '#F96239',
+                    light: '#F96239',
+                    'dark-light': '#d45331',
                 },
                 secondary: {
-                    DEFAULT: '#805dca',
-                    light: '#ebe4f7',
+                    DEFAULT: '#D8DFE2',
+                    light: '#D8DFE2',
                     'dark-light': 'rgb(128 93 202 / 15%)',
                 },
                 success: {
@@ -69,9 +69,15 @@ module.exports = {
                     light: '#e0e6ed',
                     dark: '#888ea8',
                 },
+                background: {
+                    DEFAULT: '#333E48',
+                    light: '333E48',
+                    dark: '333E48'
+                }
             },
             fontFamily: {
-                Inter: ["Inter", "sans-serif"],
+                // Inter: ["Inter", "sans-serif"],
+                Gotham: ["Gotham", "sans-serif"]
             },
             spacing: {
                 4.5: '18px',

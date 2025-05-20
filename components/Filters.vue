@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row justify-center items-end gap-4 bg-white/80 py-6 px-4 rounded-lg mx-4 md:mx-10 flex-wrap">
+    <div class="flex flex-row justify-center items-end gap-4 bg-secondary py-6 px-4 rounded-lg mx-4 md:mx-10 flex-wrap">
         <div class="flex flex-col gap-1 items-start">
             <div> Pick-up location</div>
             <div class="relative">
@@ -34,8 +34,8 @@
                     bg-white placeholder-black/70 text-black focus:outline-none" placeholder="Search a Location">
             </div>
         </div>
-        <a href=""
-            class="flex items-center gap-x-2 rounded-full px-6 py-3 text-base italic bg-black text-white transition-all duration-300">
+        <a href="" class="flex items-center gap-x-2 rounded-full px-6 py-3 text-base bg-primary text-white hover:bg-primary-dark-light
+             transition-all duration-300 border-none">
             Find a Vehicule
             <iconRight />
         </a>

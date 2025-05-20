@@ -1,7 +1,6 @@
 <template>
-    <div class="main-section relative font-nunito text-sm font-normal antialiased">
+    <div class="main-section relative text-sm font-normal antialiased">
         <div class="text-black dark:text-white-dark">
-            <!-- screen loader -->
             <div v-show="store.isShowMainLoader"
                 class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
                 <svg width="64" height="64" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg" fill="#4361ee">

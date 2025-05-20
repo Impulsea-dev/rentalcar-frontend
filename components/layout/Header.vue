@@ -1,8 +1,8 @@
 <template>
-    <header class="flex justify-between items-center fixed top-0 w-full py-4 px-5 md:px-10 bg-black z-30">
+    <header class="flex justify-between items-center fixed top-0 w-full py-4 px-5 md:px-10 bg-[#333E48] z-30">
         <div class="flex flex-grow basis-0 text-white">
             <NuxtLink to="/">
-                <img src="../../logo.svg" class="w-[171px] h-6" alt="">
+                <!-- <img src="../../logo.svg" class="w-[171px] h-10" alt=""> -->
             </NuxtLink>
         </div>
 

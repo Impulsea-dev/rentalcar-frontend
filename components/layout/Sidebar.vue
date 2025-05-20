@@ -1,12 +1,12 @@
 <template>
     <div>
-        <button @click="toggleSidebar" class="text-2xl text-white">
+        <button @click="toggleSidebar" class="text-2xl text-primary">
             &#9776;
         </button>
         <div v-if="sidebarOpen" @click="toggleSidebar" class="fixed inset-0 backdrop-filter backdrop-blur-sm"></div>
 
         <aside :class="{ 'translate-x-0': sidebarOpen, 'translate-x-full': !sidebarOpen }"
-            class="fixed inset-y-0 right-0 bg-black bg-opacity-90 w-64 md:w-[360px] px-10 transition-transform ease-in-out duration-500">
+            class="fixed inset-y-0 right-0 bg-background bg-opacity-90 w-64 md:w-[360px] px-10 transition-transform ease-in-out duration-500">
             <!-- Contenido del Sidebar -->
             <nav class="flex flex-col gap-6 my-20 text-xl md:text-2xl font-bold hover:cursor-pointer">
                 <NuxtLink to="/login" class="text-white hover:opacity-50" @click="handleLinkClick">Login/Register
@@ -49,6 +49,7 @@ const handleLinkClick = () => {
     sidebarOpen.value = false
     // }
 }
+
 </script>
 
 

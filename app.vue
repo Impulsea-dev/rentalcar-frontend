@@ -10,9 +10,6 @@
 
 </script>
 <style>
-body {
-  font-family: 'ABeeZee', sans-serif;
-}
 
 .page-enter-active,
 .page-leave-active {

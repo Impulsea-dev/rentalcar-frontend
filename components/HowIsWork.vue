@@ -14,12 +14,12 @@
                             <component :is="item.icon" class="size-6 lg:size-8" />
                         </div>
                         <div class="flex flex-col gap-y-1">
-                            <span class="text-xl lg:text-2xl italic">{{ item.title }}</span>
+                            <span class="text-xl lg:text-2xl">{{ item.title }}</span>
                             <span class="text-sm lg:text-lg max-w-md text-pretty">{{ item.subtitle }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="bg-[#F5F5F5] p-28 rounded-2xl relative z-0 left-[-64px] hidden lg:block">
+                <div class="bg-secondary p-28 rounded-2xl relative z-0 left-[-64px] hidden lg:block">
                     <img src="../assets/images/car4.svg" alt="" class="w-full h-full object-cover
                     hover:scale-110 transition duration-500 cursor-pointer" />
                 </div>
