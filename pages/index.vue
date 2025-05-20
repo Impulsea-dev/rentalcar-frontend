@@ -50,8 +50,8 @@
 <script setup>
 const animation = ref(false)
 useSeoMeta({
-  title: 'My Amazing Site',
-  ogTitle: 'My Amazing Site',
+  title: 'Rental Car',
+  ogTitle: 'Rental Car',
   description: 'This is my amazing site, let me tell you all about it.',
   ogDescription: 'This is my amazing site, let me tell you all about it.',
   ogImage: 'https://example.com/image.png',
