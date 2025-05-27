@@ -3,7 +3,7 @@
         <section class="flex flex-col py-24 md:py-32 px-5 md:px-10 lg:px-20">
             <HeroAnimation>
                 <div class="flex flex-col items-center gap-10 mb-14">
-                    <span class="text-2xl md:text-5xl italic">Our Impressive Collection of Cars</span>
+                    <span class="text-2xl md:text-5xl">Our Impressive Collection of Cars</span>
                 </div>
             </HeroAnimation>
 
@@ -37,65 +37,140 @@
 </template>
 <script setup>
 const route = useRoute()
-import card3 from "~/assets/images/car3.svg";
-const cars = ref([{
-    name: 'BMW i8',
+const cars = ref([
+  {
+    name: 'Hyundai Grand i 10 Sedan',
     price: 90,
-    image: card3,
-},
-{
-    name: 'Aston Martin Vantage',
-    price: 70,
-    image: card3
-},
-{
-    name: 'Maserati Quattroporte MC',
-    price: 30,
-    image: card3
-}, {
-    name: `Mercedes-AMG GT`,
-    price: 100,
-    image: card3
-},
-{
-    name: `Chevrolet Silverado 1500`,
-    price: 40,
-    image: card3
-},
-{
-    name: `Toyota Land Cruiser Prader`,
-    price: 50,
-    image: card3
-},
-{
-    name: 'BMW i8',
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg',
+    type: ['Compact'],
+    category: 'standard',
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Automatic',
+      airConditioning: true,
+      luggage: 2
+    },
+    features: {
+      bluetooth: true,
+      radio: true,
+      camera: 'Back-up',
+      mileage: '30 MPG',
+      appleCarplay: true,
+      androidAuto: true
+    }
+  },
+  {
+    name: 'Hyundai i 20',
+    price: 45,
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/i20.jpg',
+    type: ['Compact'],
+    category: 'standard',
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Manual',
+      airConditioning: true,
+      luggage: 2
+    },
+    features: {
+      bluetooth: true,
+      radio: true,
+      camera: 'None',
+      mileage: '32 MPG',
+      appleCarplay: false,
+      androidAuto: false
+    }
+  },
+  {
+    name: 'Hyundai Grand i 10',
+    price: 80,
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/prestige-motors-hyundai-i10-main-1.jpg',
+    type: ['Intermediate'],
+    category: 'standard',
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Automatic',
+      airConditioning: true,
+      luggage: 2
+    },
+    features: {
+      bluetooth: false,
+      radio: true,
+      camera: 'None',
+      mileage: '33 MPG',
+      appleCarplay: false,
+      androidAuto: false
+    }
+  },
+  {
+    name: 'Hyundai Grand i 10 Sedan',
     price: 90,
-    image: card3,
-},
-{
-    name: 'Aston Martin Vantage',
-    price: 70,
-    image: card3
-},
-{
-    name: 'Maserati Quattroporte MC',
-    price: 30,
-    image: card3
-}, {
-    name: `Mercedes-AMG GT`,
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg',
+    type: ['Intermediate'],
+    category: 'standard',
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Automatic',
+      airConditioning: true,
+      luggage: 2
+    },
+    features: {
+      bluetooth: true,
+      radio: true,
+      camera: 'Back-up',
+      mileage: '30 MPG',
+      appleCarplay: true,
+      androidAuto: true
+    }
+  },
+  {
+    name: 'Hyundai Accent',
     price: 100,
-    image: card3
-},
-{
-    name: `Chevrolet Silverado 1500`,
-    price: 40,
-    image: card3
-},
-{
-    name: `Toyota Land Cruiser Prader`,
-    price: 50,
-    image: card3
-}])
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/economy-discount-car-rental-2018-hyundai-accent-ext3.jpg',
+    type: ['Full-Size'],
+    category: 'standard',
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Automatic',
+      airConditioning: true,
+      luggage: 3
+    },
+    features: {
+      bluetooth: true,
+      radio: true,
+      camera: 'Back-up',
+      mileage: '34 MPG',
+      appleCarplay: true,
+      androidAuto: true
+    }
+  },
+  {
+    name: 'SsangYoung Tivoli',
+    price: 110,
+    image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/ssangyong-tivoli.jpg',
+    type: ['Full-Size'],
+    category: 'commercial', // Este es el que usa naranja
+    specs: {
+      doors: 4,
+      seats: 5,
+      transmission: 'Automatic',
+      airConditioning: true,
+      luggage: 3
+    },
+    features: {
+      bluetooth: true,
+      radio: true,
+      camera: '360',
+      mileage: '28 MPG',
+      appleCarplay: true,
+      androidAuto: true
+    }
+  }
+])
 
 const currentPage = ref(parseInt(route.params.id || 1));
 const itemsPerPage = ref(4);

@@ -39,6 +39,7 @@
                 <img class="object-center object-cover h-full w-full" src="../assets/images/car.svg" />
             </div>
         </section> -->
+        <CurrentOffers/>
         <OurServices />
         <Deals&Products />
         <ImpresiveCars />

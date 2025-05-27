@@ -26,7 +26,7 @@ import affordable from "../assets/images/affordable.svg";
 import convenient from "../assets/images/convenient.svg";
 const items = ref([{
     title: 'Quality Choice',
-    subtitle: 'We offer a wide range of high-quality vehicles to choose from, including luxury cars, SUVs, vans, and more.',
+    subtitle: 'We offer a wide range of high-quality vehicles to choose from, including commercial trucks, work vans, SUVs, and more.',
     img: quality
 },
 {

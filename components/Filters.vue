@@ -1,43 +1,119 @@
 <template>
-    <div class="flex flex-row justify-center items-end gap-4 bg-secondary py-6 px-4 rounded-lg mx-4 md:mx-10 flex-wrap">
-        <div class="flex flex-col gap-1 items-start">
-            <div> Pick-up location</div>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <IconLocation class="size-4" />
-                </div>
-                <input type="search" id="searchp" class="block w-72 p-3 ps-10 text-sm border rounded-lg 
-                    bg-white placeholder-black/80 text-black focus:outline-none" placeholder="Search a Location">
-            </div>
+    <div class="flex flex-row justify-center items-end gap-10 bg-secondary py-6 px-4 md:mx-80 rounded-lg">
+      <!-- Pick-up and Drop-off location -->
+      <div class="flex flex-col gap-1 items-start">
+        <div>Pick-up and Drop-off location</div>
+        <div class="relative w-72">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+            <IconLocation class="size-4 text-gray-500" />
+          </div>
+          <ClientOnly>
+            <el-autocomplete
+              v-model="search"
+              :fetch-suggestions="querySearch"
+              placeholder="Search a Location"
+              :popper-append-to-body="false"
+              :teleport="false"
+              @select="handleSelect"
+              :class="{'has-error': errorSearch}"
+            />
+          </ClientOnly>
         </div>
-        <div class="flex flex-col gap-1 items-start">
-            <div> Pick-up date</div>
-            <div class="relative">
-                <input type="date" id="date1" class="block w-72 p-3 text-sm border rounded-lg 
-                    bg-white placeholder-black/70 text-black focus:outline-none" placeholder="Search a Location">
-            </div>
-        </div>
-        <div class="flex flex-col gap-1 items-start">
-            <div> Drop-off location</div>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <IconLocation class="size-4" />
-                </div>
-                <input type="search" id="searchd" class="block w-72 p-3 ps-10 text-sm border rounded-lg 
-                    bg-white placeholder-black/80 text-black focus:outline-none" placeholder="Search a Location">
-            </div>
-        </div>
-        <div class="flex flex-col gap-1 items-start">
-            <div>Drop-off date</div>
-            <div class="relative">
-                <input type="date" id="date2" class="block w-72 p-3 text-sm border rounded-lg 
-                    bg-white placeholder-black/70 text-black focus:outline-none" placeholder="Search a Location">
-            </div>
-        </div>
-        <a href="" class="flex items-center gap-x-2 rounded-full px-6 py-3 text-base bg-primary text-white hover:bg-primary-dark-light
-             transition-all duration-300 border-none">
-            Find a Vehicule
-            <iconRight />
-        </a>
+        <!-- <p v-if="errorSearch" class="text-red-500 text-sm mt-1">Please select a location.</p> -->
+      </div>
+
+      <!-- Dates -->
+      <div class="flex flex-col gap-1 items-start">
+        <div>Dates</div>
+        <ClientOnly>
+          <el-date-picker
+            v-model="dates"
+            type="daterange"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            size="large"
+            :append-to-body="false"
+            :teleport="false"
+            class="w-72"
+            :class="{'has-error': errorDates}"
+          />
+        </ClientOnly>
+        <!-- <p v-if="errorDates" class="text-red-500 text-sm mt-1">Please select rental dates.</p> -->
+      </div>
+
+      <!-- Find a Vehicle Button -->
+      <button
+        @click="handleFind"
+        class="flex items-center gap-x-2 rounded-full px-6 py-3 text-base bg-primary text-white hover:bg-primary-dark-light transition-all duration-300"
+      >
+        Find a Vehicle
+      </button>
     </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+// import IconLocation from '@/components/icons/IconLocation.vue'
+
+const router = useRouter()
+const dates = ref<any>(null)
+const search = ref<string>('')
+const locations = [
+  { value: 'Airport Plaza, George Town' },
+]
+const errorSearch = ref(false)
+const errorDates = ref(false)
+
+watch(dates, (newVal) => {
+  if (newVal && newVal.length === 2) {
+    errorDates.value = false
+  }
+})
+
+const querySearch = (queryString: string, cb: (results: any[]) => void) => {
+  const results = locations.filter(loc => loc.value.toLowerCase().includes(queryString.toLowerCase()))
+  cb(results)
+}
+
+const handleSelect = (item: any) => {
+  search.value = item.value
+  errorSearch.value = false
+}
+
+const handleFind = () => {
+  errorSearch.value = !search.value
+  errorDates.value = !dates.value || dates.value.length !== 2
+  if (!errorSearch.value && !errorDates.value) {
+    // navigate with query params
+    router.push({ path: '/view_our_cars/1', query: { location: search.value, start: dates.value[0], end: dates.value[1] } })
+  }
+}
+</script>
+
+<style scoped>
+::v-deep(.el-input__wrapper) {
+  @apply rounded-lg border bg-white text-black h-12;
+}
+::v-deep(.el-input__inner) {
+  @apply text-sm placeholder-black/80 ps-6;
+}
+::v-deep(.el-date-editor) {
+  @apply w-72 p-3 text-sm border rounded-lg bg-white placeholder-red-500 text-black h-12 ps-4;
+}
+::v-deep(.el-range-input::placeholder) {
+  @apply text-black;
+}
+::v-deep(.el-input__icon) {
+  @apply text-black;
+}
+
+/* Error state for Autocomplete */
+::v-deep(.has-error .el-input__wrapper) {
+  @apply border-red-500;
+}
+/* Error state for DatePicker: apply when .has-error is on the same wrapper */
+::v-deep(.el-date-editor.has-error) {
+  @apply border-red-500;
+}
+</style>

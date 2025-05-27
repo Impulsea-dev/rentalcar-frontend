@@ -18,8 +18,8 @@
                         <div class="flex flex-col gap-y-1">
                             <span class="text-xl lg:text-2xl">{{ item.title }}</span>
                             <span class="text-base md:text-lg max-w-md text-pretty">{{ item.subtitle }}</span>
-                            <span class="text-base md:text-lg max-w-md text-pretty" v-if="item.subtitle1">{{
-                        item.subtitle1 }}</span>
+                            <!-- <span class="text-base md:text-lg max-w-md text-pretty" v-if="item.subtitle1">{{
+                        item.subtitle1 }}</span> -->
                         </div>
                     </div>
                 </div>
@@ -35,13 +35,12 @@ import iconLocation from './icon/icon-location.vue';
 import iconClock from "./icon/icon-clock.vue"
 const items = [{
     title: 'Phone Numbers',
-    subtitle: '1-345-943-9550',
-    subtitle1: '1-345-949-9550',
+    subtitle: ' 1-345-949-9550',
     icon: iconPhone
 },
 {
     title: 'Address',
-    subtitle: 'P.O. Box 10315Grand Cayman KY1-1003',
+    subtitle: 'Airport Plaza, 257 Owen Roberts Drive, George Town, Grand Cayman',
     icon: iconLocation
 },
 {
