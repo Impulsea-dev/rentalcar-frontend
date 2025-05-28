@@ -62,15 +62,6 @@
                     <li><strong>Luggage:</strong> {{ car.specs.luggage }} bags</li>
                 </ul>
 
-                <!-- <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Features</h2>
-        <ul class="space-y-2 text-gray-700">
-          <li><strong>Bluetooth:</strong> {{ car.features.bluetooth ? 'Yes' : 'No' }}</li>
-          <li><strong>Radio:</strong> {{ car.features.radio ? 'Yes' : 'No' }}</li>
-          <li><strong>Camera:</strong> {{ car.features.camera }}</li>
-          <li><strong>Mileage:</strong> {{ car.features.mileage }}</li>
-          <li><strong>Apple CarPlay:</strong> {{ car.features.appleCarplay ? 'Yes' : 'No' }}</li>
-          <li><strong>Android Auto:</strong> {{ car.features.androidAuto ? 'Yes' : 'No' }}</li>
-        </ul> -->
                 <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-4">Features</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
                     <div class="flex items-center gap-3">

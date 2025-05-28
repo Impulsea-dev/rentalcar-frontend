@@ -1,6 +1,8 @@
 <template>
     <div>
         <section class="h-screen text-center overflow-hidden bg-background">
+            <HeroAnimation>
+
             <div class="flex flex-col h-full relative">
                 <!-- <HeroAnimation class="px-5"> -->
                 <h2
@@ -19,6 +21,7 @@
                     <Filters class="-translate-y-10" />
                 </div>
             </div>
+            </HeroAnimation>
         </section>
         <!-- <section class="h-screen text-center relative overflow-hidden">
             <div class="flex flex-col h-full relative">

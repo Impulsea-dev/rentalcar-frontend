@@ -1,7 +1,9 @@
 export const cars = [
   {
+    id: 1,
     name: 'Hyundai Grand i 10 Sedan',
     price: 90,
+    brand: 'Hyundai',
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg',
     type: ['Compact'],
     category: 'standard',
@@ -23,8 +25,10 @@ export const cars = [
     }
   },
   {
+    id: 2,
     name: 'Hyundai i 20',
     price: 45,
+    brand: 'Hyundai',
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/i20.jpg',
     type: ['Compact'],
     category: 'standard',
@@ -46,8 +50,10 @@ export const cars = [
     }
   },
   {
+    id: 3,
     name: 'Hyundai Grand i 10',
     price: 80,
+    brand: 'Hyundai',
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/prestige-motors-hyundai-i10-main-1.jpg',
     type: ['Intermediate'],
     category: 'standard',
@@ -69,8 +75,10 @@ export const cars = [
     }
   },
   {
+    id: 4,
     name: 'Hyundai Grand i 10 Sedan',
     price: 90,
+    brand: 'Hyundai',
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg',
     type: ['Intermediate'],
     category: 'standard',
@@ -92,7 +100,9 @@ export const cars = [
     }
   },
   {
+    id: 5,
     name: 'Hyundai Accent',
+    brand: 'Hyundai',
     price: 100,
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/economy-discount-car-rental-2018-hyundai-accent-ext3.jpg',
     type: ['Full-Size'],
@@ -115,8 +125,10 @@ export const cars = [
     }
   },
   {
+    id: 6,
     name: 'SsangYoung Tivoli',
     price: 110,
+    brand: 'SsangYoung',
     image: 'https://economycarrental.com.ky/wp-content/uploads/2017/01/ssangyong-tivoli.jpg',
     type: ['Full-Size'],
     category: 'commercial',

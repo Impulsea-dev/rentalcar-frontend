@@ -1,88 +1,123 @@
 <template>
     <div class="flex flex-col items-center my-10">
-        <span class="text-xl font-bold">Please fill out this Information in order to serve the desired car</span>
-        <form class="flex flex-col gap-6 my-4">
-            <div>
-                <label for="first_name" class="block text-base italic font-medium">First name</label>
-                <input v-model="formData.fname" type="text" id="first_name"
-                    class="bg-gray-50 border border-black text-sm rounded-lg block w-96 p-2.5" />
-            </div>
-            <div>
-                <label for="last_name" class="block text-base italic font-medium">Last
-                    name</label>
-                <input v-model="formData.lname" type="text" id="last_name"
-                    class="bg-gray-50 border border-black text-sm rounded-lg block w-96 p-2.5" />
-            </div>
-            <div>
-                <label for="email" class="block text-base italic font-medium">Email</label>
-                <input v-model="formData.email" type="email" id="email"
-                    class="bg-gray-50 border border-black text-sm rounded-lg block w-96 p-2.5" />
-            </div>
-            <div>
-                <label for="phone" class="block text-base italic font-medium">Phone</label>
+        <span class="text-lg font-normal text-center max-w-xl">
+            Please fill out this Information in order to serve the desired car
+        </span>
+
+        <el-form ref="formRef" :model="formData" :rules="rules" label-position="top"
+            class="flex flex-col gap-6 my-8 w-96">
+            <el-form-item label="First Name" prop="fname">
+                <el-input v-model="formData.fname" placeholder="Enter your first name" size="large" />
+            </el-form-item>
+
+            <el-form-item label="Last Name" prop="lname">
+                <el-input v-model="formData.lname" placeholder="Enter your last name" size="large" />
+            </el-form-item>
+
+            <el-form-item label="Email" prop="email">
+                <el-input v-model="formData.email" type="email" placeholder="Enter your email" size="large" />
+            </el-form-item>
+
+            <el-form-item label="Phone" prop="phone">
                 <client-only>
                     <vue-tel-input v-if="countrycode" v-model="formData.phone" @validate="phoneObject"
                         :mode="'international'" :defaultCountry="countrycode.trim()"
                         :invalidMsg="'Please enter a valid phone number'" validCharactersOnly
-                        class="p-1.5 !rounded !border !border-black" :dropdownOptions="{
-                    disabled: false, showDialCodeInList: false, showDialCodeInSelection: false,
-                    showFlags: true, showSearchBox: true, tabindex: 0
-                }"></vue-tel-input>
+                        class="h-10 !rounded w-full" :dropdownOptions="{
+                            disabled: false,
+                            showDialCodeInList: false,
+                            showDialCodeInSelection: false,
+                            showFlags: true,
+                            showSearchBox: true,
+                            tabindex: 0
+                        }" />
                 </client-only>
-            </div>
-            <div>
-                <label for="country" class="block text-base italic font-medium">Country</label>
-                <select name="country" id="country" v-model="formData.country"
-                    class="bg-gray-50 border border-black text-sm rounded-lg block w-96 p-2.5">
-                    <option v-for="country in countries">{{ country }}</option>
-                </select>
-            </div>
-            <div>
-                <label for="street" class="block text-base italic font-medium">Street Address</label>
-                <input v-model="formData.saddress" type="text" id="street"
-                    class="bg-gray-50 border border-black text-sm rounded-lg block w-96 p-2.5" />
-            </div>
-        </form>
+            </el-form-item>
+
+            <el-form-item label="Country" prop="country">
+                <el-select v-model="formData.country" placeholder="Select your country" size="large">
+                    <el-option v-for="country in countries" :key="country" :label="country" :value="country" />
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="Street Address" prop="saddress">
+                <el-input v-model="formData.saddress" placeholder="Enter your street address" size="large" />
+            </el-form-item>
+        </el-form>
     </div>
 </template>
+
 <script setup>
-import { ref, watch } from 'vue';
-import { getAllCountries, getCurrentCountry } from "~/utils/"
-const instance = getCurrentInstance();
+import { ref, watch, getCurrentInstance } from 'vue'
+import { getAllCountries, getCurrentCountry } from '~/utils/'
+
+const formRef = ref(null)
+const instance = getCurrentInstance()
+
 const formData = ref({
-    fname: null,
-    lname: null,
-    email: null,
-    phone: null,
-    country: null,
-    saddress: null
-});
-const countries = ref(null)
+    fname: '',
+    lname: '',
+    email: '',
+    phone: '',
+    country: '',
+    saddress: ''
+})
+
+const countries = ref([])
 const countrycode = ref(null)
-const phoneObject = (object) => {
-    // console.log(object);
-    // this.isValid = object.valid;
+
+const getFormData = () => {
+  return { ...formData.value }
 }
 
-watch(formData.value, () => {
-    const isFormComplete = Object.values(formData.value).every(value => value !== null && value !== "");
-    isFormComplete ? instance.emit('form-changed', isFormComplete) : null
-});
+
+const phoneObject = () => {
+    // Puedes implementar validación adicional del número si lo necesitas
+}
+
+const rules = {
+    fname: [{ required: true, message: 'First name is required', trigger: 'blur' }],
+    lname: [{ required: true, message: 'Last name is required', trigger: 'blur' }],
+    email: [
+        { required: true, message: 'Email is required', trigger: 'blur' },
+        { type: 'email', message: 'Invalid email', trigger: 'blur' }
+    ],
+    phone: [{ required: true, message: 'Phone number is required', trigger: 'blur' }],
+    country: [{ required: true, message: 'Country is required', trigger: 'change' }],
+    saddress: [{ required: true, message: 'Street address is required', trigger: 'blur' }]
+}
+
+
 const allCountries = () => {
-    getAllCountries().then(response => {
-        countries.value = response
-    }).catch(error => {
-        console.error(error);
-    });
+    getAllCountries()
+        .then(response => {
+            countries.value = response
+        })
+        .catch(error => {
+            console.error(error)
+        })
 }
+
 const getCountry = () => {
-    getCurrentCountry().then((response) => {
-        formData.value.country = response.country_name
-        countrycode.value = response.country_code
-    }).catch((error) => {
-        console.log(error);
-    })
+    getCurrentCountry()
+        .then(response => {
+            formData.value.country = response.country_name
+            countrycode.value = response.country_code
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }
+
 allCountries()
 getCountry()
+
+const validateForm = () => {
+    return formRef.value?.validate();
+}
+
+defineExpose({
+    validateForm,
+    getFormData
+})
 </script>
