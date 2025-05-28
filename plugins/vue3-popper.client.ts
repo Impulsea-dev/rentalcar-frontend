@@ -1,5 +1,6 @@
-import Popper from 'vue3-popper';
-
-export default defineNuxtPlugin((nuxtApp) => {
-    nuxtApp.vueApp.component('Popper', Popper);
-});
+export default defineNuxtPlugin(async (nuxtApp) => {
+  if (process.client) {
+    const Popper = (await import('vue3-popper')).default
+    nuxtApp.vueApp.component('Popper', Popper)
+  }
+})

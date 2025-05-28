@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-
+    ssr: false,
     modules: ['@pinia/nuxt', 'nuxt-headlessui','@element-plus/nuxt'],
     devtools: { enabled: false },
     app: {
@@ -14,7 +14,7 @@ export default defineNuxtConfig({
                     name: 'viewport',
                     content: 'width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no',
                 },
-                { hid: 'description', name: 'description', content: '' },
+                { name: 'description', content: '' },
                 { name: 'format-detection', content: 'telephone=no' },
             ],
             link: [
@@ -28,9 +28,13 @@ export default defineNuxtConfig({
         pageTransition: { name: 'page', mode: 'out-in' },
     },
     build: {
-        transpile: ['vue3-form-wizard']
+        transpile: ['vue3-form-wizard', 'element-plus', 'vue3-popper']
     },
-
+    vite: {
+        ssr: {
+            noExternal: ['element-plus', 'vue3-popper']
+        }
+    },
     css: ['~/assets/css/app.css'],
     postcss: {
         plugins: {
@@ -39,6 +43,15 @@ export default defineNuxtConfig({
         },
     },
     plugins: ['vue-tel-input'],
+    compatibilityDate: '2024-08-14',
+    nitro: {
+        
+        esbuild: {
+            options: {
+              target: 'esnext',
+            },
+          },
+    },
 
 
     router: {

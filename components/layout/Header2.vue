@@ -99,9 +99,10 @@
                                         class="top-11 w-[300px] !py-0 text-xs text-dark dark:text-white-dark sm:w-[375px]">
                                         <li class="mb-5">
                                             <div class="relative overflow-hidden rounded-t-md !p-5 text-white">
-                                                <div
+                                                
+                                                <!-- <div
                                                     class="absolute inset-0 h-full w-full bg-[url('/assets/images/menu-heade.jpg')] bg-cover bg-center bg-no-repeat">
-                                                </div>
+                                                </div> -->
                                                 <h4 class="relative z-10 text-lg font-semibold">Messages</h4>
                                             </div>
                                         </li>
