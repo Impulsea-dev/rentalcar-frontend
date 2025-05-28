@@ -32,6 +32,7 @@ Build the application for production:
 ```bash
 npm run build
 ```
+
 Locally preview production build:
 
 ```bash
