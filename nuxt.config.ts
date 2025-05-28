@@ -1,4 +1,7 @@
 export default defineNuxtConfig({
+
+    modules: ['@pinia/nuxt', 'nuxt-headlessui','@element-plus/nuxt'],
+    devtools: { enabled: false },
     app: {
         head: {
             title: 'Economy Rental Car',
@@ -35,7 +38,6 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    modules: ['@pinia/nuxt', 'nuxt-headlessui'],
     plugins: ['vue-tel-input'],
 
 
