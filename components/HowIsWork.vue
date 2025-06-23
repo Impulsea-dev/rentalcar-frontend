@@ -1,7 +1,7 @@
 <template>
     <section class="flex flex-col items-center justify-center bg-white text-black">
         <div class="flex flex-col items-center gap-10 my-20 md:my-40 mx-4">
-            <span class="text-3xl md:text-5xl italic">How it woks</span>
+            <span class="text-3xl md:text-5xl italic">How it works</span>
             <span class="text-base md:text-lg max-w-3xl text-center italic">Renting a luxury car has never been easier.
                 Our
                 streamlined
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="bg-secondary p-28 rounded-2xl relative z-0 left-[-64px] hidden lg:block">
-                    <img src="../assets/images/car4.svg" alt="" class="w-full h-full object-cover
+                    <img src="@/assets/images/hiwcar.webp" alt="" class="w-auto h-96 object-contain
                     hover:scale-110 transition duration-500 cursor-pointer" />
                 </div>
             </div>

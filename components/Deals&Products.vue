@@ -13,8 +13,8 @@
                         <span class="text-2xl md:text-3xl max-w-sm text-pretty text-black">{{ item.title
                             }}</span>
                         <div class="flex flex-col flex-grow justify-end">
-                            <button class="rounded-full px-6 py-3 bg-primary mt-4
-      text-sm md:text-base hover:bg-primary-dark-light transition-colors duration-300 font-bold text-white">
+                            <button class="rounded-full px-6 py-3 bg-economy mt-4
+      text-sm md:text-base hover:bg-economy/80 transition-colors duration-300 font-bold text-white">
                                 Book Now
                             </button>
                         </div>

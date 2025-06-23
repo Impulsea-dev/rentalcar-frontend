@@ -73,6 +73,11 @@ module.exports = {
                     DEFAULT: '#333E48',
                     light: '333E48',
                     dark: '333E48'
+                },
+                economy:{
+                    DEFAULT: '#00BEA1',
+                    light: '#00BEA1',
+                    'dark-light': '#00BEA1',
                 }
             },
             fontFamily: {

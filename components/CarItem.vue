@@ -3,7 +3,7 @@
           <span
     :class="[
       'absolute top-2 right-2 flex items-center space-x-1 px-2 py-1 text-xs font-semibold rounded-full text-white z-10',
-      car.category === 'commercial' ? 'bg-orange-500' : 'bg-green-500'
+      car.category === 'commercial' ? 'bg-primary' : 'bg-economy'
     ]"
   >
     <svg
@@ -102,7 +102,7 @@
                     hover:text-white hover:bg-black transition-colors duration-300 text-center text-sm md:text-base
                     hover:cursor-pointer">Rent Now</NuxtLink> -->
                 <ButtonGeneric :to="`/car/${car.name}/`"
-                    :class="`px-4 py-2 text-sm md:text-base font-medium ${car.category === 'standard' ? 'before:bg-green-500' : 'before:bg-primary'}`">
+                    :class="`px-4 py-2 text-sm md:text-base font-medium ${car.category === 'standard' ? 'before:bg-economy' : 'before:bg-primary'}`">
                     Rent Now
                 </ButtonGeneric>
             </div>

@@ -30,13 +30,13 @@
             </button>
 
             <div class="ml-auto">
-                <button v-if="activeStep < totalSteps - 1" @click="next" class=" mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-black text-white transition-all
+                <button v-if="activeStep < totalSteps - 1" @click="next" class=" mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-economy text-white transition-all
                  duration-300 hover:opacity-60">
                     Next
                     <iconRight />
                 </button>
 
-                <button v-else @click="completeReservation" class="mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-black text-white transition-all
+                <button v-else @click="completeReservation" class="mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-economy text-white transition-all
                  duration-300 hover:opacity-60">
                     Complete Reservation
                 </button>

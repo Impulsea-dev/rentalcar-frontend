@@ -8,7 +8,7 @@
 
             <div class="flex flex-row items-center mt-10">
                 <div class="rounded-2xl relative z-0 left-[80px] opacity-90 hidden lg:block">
-                    <img src="../assets/images/city.svg" alt="" class="w-full h-full object-cover" />
+                    <img src="../assets/images/city.webp" alt="" class="w-full h-full object-cover" />
                 </div>
                 <div class="flex flex-col gap-4 relative z-10">
                     <div class="flex bg-white rounded-xl border gap-4 p-4 min-h-32" v-for="(item, i) in items" :key="i">

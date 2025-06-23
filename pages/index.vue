@@ -1,48 +1,32 @@
 <template>
     <div>
         <section class="h-screen text-center overflow-hidden bg-background">
-            <HeroAnimation>
-
             <div class="flex flex-col h-full relative">
-                <!-- <HeroAnimation class="px-5"> -->
                 <h2
-                    class="text-white pt-32 md:pt-40 text-[48px] md:text-[64px] font-bold tracking-in-expand-forward-bottom pb-4">
+                    class="text-white pt-32 md:pt-40 text-4xl md:text-[48px] xl:text-[64px] font-bold tracking-in-expand-forward-bottom pb-4">
                     Best Rental Car Service In Grand Cayman
                 </h2>
-                <p class="text-white text-lg md:text-xl tracking-in-expand-forward-bottom">
+                <p class="text-white text-base md:text-lg lg:text-xl tracking-in-expand-forward-bottom">
                     From as low as $25 per day with limited time offer discounts
                 </p>
-                <!-- </HeroAnimation> -->
 
                 <div class="flex flex-col flex-grow justify-end pb-10">
-                    <ClientOnly>
-                        <img src="~/assets/images/car.svg" class="object-contain object-center w-full h-full hidden md:block" alt="">
-                    </ClientOnly>
-                    <Filters class="-translate-y-10" />
+                    <HeroAnimation>
+                        <ClientOnly>
+                            <div class="md:flex items-center hidden my-10 2xl:mx-20">
+                                <img src="@/assets/images/herocar1.webp"
+                                    class="cars-img translate-x-10 2xl:translate-x-20" alt="Car 1">
+                                <img src="@/assets/images/herocar2.webp"
+                                    class="cars-img -translate-x-10 2xl:-translate-x-20" alt="Car 2">
+
+                            </div>
+                        </ClientOnly>
+                        <Filters class="-translate-y-10" />
+                    </HeroAnimation>
                 </div>
             </div>
-            </HeroAnimation>
         </section>
-        <!-- <section class="h-screen text-center relative overflow-hidden">
-            <div class="flex flex-col h-full relative">
-                <HeroAnimation>
-                    <h2 class="text-white pt-40 text-[64px] font-medium tracking-in-expand-forward-bottom pb-4">
-                        Best Rental Car Service In Grand Cayman
-                    </h2>
-                    <p class="text-white text-xl tracking-in-expand-forward-bottom">
-                        From as low as $25 per day with limited time offer discounts
-                    </p>
-                </HeroAnimation>
-
-                <div class="flex flex-col flex-grow justify-end pb-10">
-                    <Filters />
-                </div>
-            </div>
-            <div class="absolute top-0 bottom-0 h-full w-full">
-                <img class="object-center object-cover h-full w-full" src="../assets/images/car.svg" />
-            </div>
-        </section> -->
-        <CurrentOffers/>
+        <CurrentOffers />
         <OurServices />
         <Deals&Products />
         <ImpresiveCars />
@@ -52,16 +36,20 @@
 
 </template>
 <script setup>
-const animation = ref(false)
 useSeoMeta({
-  title: 'Rental Car',
-  ogTitle: 'Rental Car',
-  description: 'This is my amazing site, let me tell you all about it.',
-  ogDescription: 'This is my amazing site, let me tell you all about it.',
-  ogImage: 'https://example.com/image.png',
-  twitterCard: 'summary_large_image',
-})
-onMounted(() => {
-    animation.value = true
+    title: 'Rental Car',
+    ogTitle: 'Rental Car',
+    description: 'This is my amazing site, let me tell you all about it.',
+    ogDescription: 'This is my amazing site, let me tell you all about it.',
+    ogImage: 'https://example.com/image.png',
+    twitterCard: 'summary_large_image',
 })
 </script>
+<style>
+.cars-img {
+    width: 100%;
+    height: 384px;
+    object-fit: contain;
+    aspect-ratio: 1/1;
+}
+</style>

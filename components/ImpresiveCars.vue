@@ -18,8 +18,8 @@
             v-for="tab in tabs"
             :key="tab"
             @click="tabSelected = tab"
-            class="text-base md:text-lg font-normal rounded-full px-5 py-3 whitespace-nowrap transition-all duration-300 hover:text-white hover:bg-primary hover:cursor-pointer"
-            :class="tabSelected === tab ? 'text-white bg-primary' : 'text-black bg-white'"
+            class="text-base md:text-lg font-normal rounded-full px-5 py-3 whitespace-nowrap transition-all duration-300 hover:text-white hover:bg-economy hover:cursor-pointer"
+            :class="tabSelected === tab ? 'text-white bg-economy' : 'text-black bg-white'"
           >
             {{ tab }}
           </span>
@@ -44,7 +44,7 @@
       <!-- Botón CTA -->
       <ButtonGeneric
         :to="'/view_our_cars/1'"
-        :class="'px-10 py-4 text-sm md:text-base bg-white !border-none font-normal before:bg-primary '"
+        :class="'px-10 py-4 text-sm md:text-base bg-white !border-none font-normal before:bg-economy '"
       >
         <div class="flex items-center gap-x-2">
           See All Cars

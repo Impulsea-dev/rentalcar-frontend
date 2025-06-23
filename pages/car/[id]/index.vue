@@ -7,7 +7,7 @@
                     <img :src="car.image" :alt="car.name" class="w-full h-auto rounded-xl shadow-md mb-6" />
                     <span :class="[
                         'absolute top-2 right-2 flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full text-white z-10',
-                        car.category === 'commercial' ? 'bg-orange-500' : 'bg-green-500'
+                        car.category === 'commercial' ? 'bg-primary' : 'bg-economy'
                     ]">
                         <svg v-if="car.category === 'commercial'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,7 +40,7 @@
 
                 <div class="flex gap-4">
                     <button class="px-4 py-2 rounded-full flex items-center text-white"
-                        :class="car.category === 'standard' ? 'bg-green-500 hover:bg-green-600' : 'bg-orange-500 hover:bg-orange-600'"
+                        :class="car.category === 'standard' ? 'bg-economy hover:bg-economy/80' : 'bg-primary hover:bg-primary/80'"
                         @click="handleReservation">
                         Reserve
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24"
@@ -142,7 +142,7 @@
                                 {{ related.category }}
                             </el-tag>
                         </div>
-                        <router-link :to="`/car/${related.name}`" class="text-orange-500 hover:underline text-sm">
+                        <router-link :to="`/car/${related.name}`" class="text-primary hover:underline text-sm">
                             View Details →
                         </router-link>
                     </div>

@@ -21,7 +21,7 @@
             <p class="text-sm text-gray-500 mb-4">{{ offer.subtitle }}</p>
             <p class="text-gray-700 mb-6 flex-grow">{{ offer.description }}</p>
             <button
-              class="inline-flex items-center border-none text-orange-500 font-medium rounded px-4 py-2"
+              class="inline-flex items-center border-none text-economy font-medium rounded px-4 py-2"
               @click="window.open(offer.url, '_blank')"
             >
               View Offer
