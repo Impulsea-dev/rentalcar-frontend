@@ -3,7 +3,7 @@
     <img
       src="/economy_white.png"
       alt="Logo 1"
-      :class="['w-auto', imageClass, '-mr-8']"
+      :class="['w-auto', imageClass, '-mr-8 scale-[.88]']"
       :style="{ height: height + 'px' }"
     />
     <img

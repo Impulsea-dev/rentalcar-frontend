@@ -30,6 +30,9 @@ export default defineNuxtConfig({
     build: {
         transpile: ['vue3-form-wizard', 'element-plus', 'vue3-popper']
     },
+    // routeRules: {
+    //     '/api/**': { proxy: { to: 'http://132.145.138.37:2525/' } }
+    // },
     vite: {
         ssr: {
             noExternal: ['element-plus', 'vue3-popper']
@@ -45,7 +48,13 @@ export default defineNuxtConfig({
     plugins: ['vue-tel-input'],
     compatibilityDate: '2024-08-14',
     nitro: {
-        
+          devProxy: {
+            "/api": {
+                target: "http://132.145.138.37:2525/api",
+                changeOrigin: true,
+                prependPath: true,
+            },
+        },
         esbuild: {
             options: {
               target: 'esnext',

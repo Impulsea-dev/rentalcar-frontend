@@ -1,44 +1,44 @@
 <template>
   <div>
     <section class="flex flex-col py-24 md:py-32 px-5 md:px-10 lg:px-20">
-        <div class="flex flex-col items-center gap-10 mb-14">
-          <span class="text-2xl md:text-5xl">Our Impressive Collection of Cars</span>
-        </div>
+      <div class="flex flex-col items-center gap-10 mb-14">
+        <span class="text-2xl md:text-5xl">Our Impressive Collection of Cars</span>
+      </div>
       <!-- Filtros -->
       <div class="flex gap-4 mb-10 flex-wrap justify-center md:justify-start">
         <!-- Select de Marca -->
         <div class="flex max-w-xs w-full">
           <el-select v-model="selectedBrand" placeholder="Select Brand" class="w-full" size="large"
             @change="filterCars">
-            <el-option v-for="brand in brandOptions" :key="brand" :label="brand" :value="brand" />
+            <el-option v-for="brand in brandOptions" :key="brand" :label="brand.name" :value="brand.value" />
           </el-select>
         </div>
 
         <!-- Select de Tipo -->
         <div class="flex max-w-xs w-full">
           <el-select v-model="selectedType" placeholder="Select Type" class="w-full" size="large" @change="filterCars">
-            <el-option v-for="type in typeOptions" :key="type" :label="type" :value="type" />
+            <el-option v-for="type in typeOptions" :key="type" :label="type.name" :value="type.value" />
           </el-select>
         </div>
 
         <!-- Select de Orden de Precio -->
-        <div class="flex max-w-xs w-full">
+        <!-- <div class="flex max-w-xs w-full">
           <el-select v-model="selectedSort" placeholder="Sort by Price" class="w-full" size="large"
             @change="filterCars">
             <el-option v-for="sort in sortOptions" :key="sort" :label="sort" :value="sort" />
           </el-select>
-        </div>
+        </div> -->
       </div>
 
       <!-- Resultados -->
       <transition name="fade" mode="out-in">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" :key="currentPage">
-          <CarItem v-for="car in currentPageCars" :car="car" :key="car.id" />
+          <CarItem v-for="car in vehicles" :car="car" :key="car.id" />
         </div>
       </transition>
 
       <!-- Paginación -->
-      <div class="flex justify-between items-center py-20">
+      <div class="flex justify-between items-center py-20" v-if="itemsPerPage > 0">
         <vue-awesome-paginate :total-items="totalCars" :items-per-page="itemsPerPage" :max-pages-shown="5"
           v-model="currentPage" @click="goToPage" :hide-prev-next="true" />
         <span class="text-base">
@@ -52,47 +52,38 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { cars } from '@/utils/data.js'
-
+import { brandOptions, typeOptions } from '@/utils/data.js'
+import { getVehicles } from '@/composables/vehicles'
 const route = useRoute()
 const router = useRouter()
-
-// Filtros y paginación
+const vehicles = ref([])
 const selectedBrand = ref(route.query.brand || 'Any Brand')
 const selectedType = ref(route.query.type || 'Any Type')
 const selectedSort = ref(route.query.sort || 'Price Low to High')
 const currentPage = ref(parseInt(route.params.id) || 1)
-const itemsPerPage = 4
-
-// Opciones (pueden estar fuera si no cambian)
-const brandOptions = ['Any Brand', 'Hyundai', 'SsangYoung']
-const typeOptions = ['Any Type', 'Compact', 'Intermediate', 'Standard', 'Full-Size', 'Compact-SUV', 'Standard-SUV', 'Passenger Van','Pickup Truck']
+const itemsPerPage = ref(20)
+const totalCars = ref(0)
 const sortOptions = ['Price Low to High', 'Price High to Low']
+onMounted(() => {
+  getVehiclesData()
+})
 
-// Filtrar autos
-const filteredCars = computed(() =>
-  cars.filter(car =>
-    (selectedBrand.value === 'Any Brand' || car.brand === selectedBrand.value) &&
-    (selectedType.value === 'Any Type' || (Array.isArray(car.type) && car.type.includes(selectedType.value)))
-  )
+const getVehiclesData = async () => {
+  await getVehicles(currentPage.value, itemsPerPage.value, '', '', selectedBrand.value !== 'Any Brand' ? selectedBrand.value : '',
+    selectedType.value !== 'Any Type' ? selectedType.value : ''
+  ).then((response) => {
+    vehicles.value = response.data.items
+    itemsPerPage.value = response.data.page_size
+    totalCars.value = response.data.total
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+const totalPages = computed(() =>
+  itemsPerPage.value > 0 ? Math.ceil(totalCars.value / itemsPerPage.value) : 0
 )
 
-// Ordenar autos
-const sortedCars = computed(() => {
-  const sorted = [...filteredCars.value]
-  if (selectedSort.value === 'Price Low to High') sorted.sort((a, b) => a.price - b.price)
-  else if (selectedSort.value === 'Price High to Low') sorted.sort((a, b) => b.price - a.price)
-  return sorted
-})
-
-const totalCars = computed(() => sortedCars.value.length)
-const totalPages = computed(() => Math.ceil(totalCars.value / itemsPerPage))
-
-// Autos para la página actual
-const currentPageCars = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  return sortedCars.value.slice(start, start + itemsPerPage)
-})
 
 // Navegar a página o cambiar filtros actualizando ruta con query
 function updateRoute(page = currentPage.value) {
@@ -106,16 +97,18 @@ function updateRoute(page = currentPage.value) {
   })
 }
 
-// Función para cambiar página
+
 const goToPage = (page) => {
   currentPage.value = page
   updateRoute(page)
+  getVehiclesData()
 }
 
-// Función para filtrar (reinicia a página 1)
+
 const filterCars = () => {
   currentPage.value = 1
   updateRoute(1)
+  getVehiclesData()
 }
 
 // Sincronizar filtros y página con la ruta cuando cambian manualmente
@@ -124,7 +117,9 @@ watch(() => route.fullPath, () => {
   selectedType.value = route.query.type || 'Any Type'
   selectedSort.value = route.query.sort || 'Price Low to High'
   currentPage.value = parseInt(route.params.id) || 1
+  getVehiclesData()
 }, { immediate: true })
+
 
 
 </script>
