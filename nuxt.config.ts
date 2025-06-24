@@ -18,7 +18,7 @@ export default defineNuxtConfig({
                 { name: 'format-detection', content: 'telephone=no' },
             ],
             link: [
-                { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+                { rel: 'icon', type: 'image/x-icon', href: '/economy_white.png' },
                 {
                     rel: 'stylesheet',
                     href: 'https://fonts.googleapis.com/css2?family=ABeeZee&display=swap',
