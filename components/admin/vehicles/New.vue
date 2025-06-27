@@ -64,7 +64,6 @@
 import GeneralForm from './GeneralForm.vue';
 import FeaturesForm from './FeaturesForm.vue';
 import PricingForm from './PricingForm.vue';
-import { version } from 'vue';
 const showModal = ref(false)
 const activeStep = ref(0)
 const totalSteps = 3

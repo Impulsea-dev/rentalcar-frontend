@@ -2,7 +2,7 @@
     <div>
         <!-- Search and New Vehicle -->
         <div class="flex items-center justify-end mb-6 gap-4">
-            <NewVehicle/>
+            <NewVehicle />
             <el-input v-model="search" placeholder="Search by brand or model" clearable class="search-input"
                 size="large">
                 <template #prefix>
@@ -46,6 +46,9 @@
             <el-pagination background layout="prev, pager, next" :total="totalCars" :page-size="itemsPerPage"
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
+
+        <EditVehicle v-show="editModalVisible" :vehicle="vehicleToEdit" :visible="editModalVisible"
+            @close="editModalVisible = false" />
     </div>
 </template>
 <script setup>
@@ -53,12 +56,16 @@ import { ref, computed, onMounted } from 'vue'
 import { getVehicles } from '@/composables/vehicles'
 import { MoreFilled, Search } from '@element-plus/icons-vue'
 import NewVehicle from './vehicles/New.vue'
+import EditVehicle from './EditVehicle.vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const vehicles = ref([])
 const search = ref('')
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 const totalCars = ref(0)
+const editModalVisible = ref(false)
+const vehicleToEdit = reactive({})
 
 onMounted(async () => {
     await fetchVehicles()
@@ -71,7 +78,7 @@ watch(search, (newVal) => {
 
 const fetchVehicles = async () => {
     await getVehicles(currentPage.value, itemsPerPage.value, '', search.value, '', '').then((response) => {
-        vehicles.value = response.data.items  
+        vehicles.value = response.data.items
         itemsPerPage.value = response.data.page_size
         totalCars.value = response.data.total
     }).catch((error) => {
@@ -80,17 +87,39 @@ const fetchVehicles = async () => {
 }
 
 const handlePageChange = async (newPage) => {
-  currentPage.value = newPage
-  await fetchVehicles()
+    currentPage.value = newPage
+    await fetchVehicles()
 }
 
 const editVehicle = (vehicle) => {
-    console.log('Edit:', vehicle)
+    Object.assign(vehicleToEdit, vehicle)
+    editModalVisible.value = true
 }
 
 const deleteVehicle = (vehicle) => {
-    console.log('Delete:', vehicle)
+    ElMessageBox.confirm(
+        `Are you sure you want to delete the vehicle ${vehicle.brand_name} ${vehicle.model}?`,
+        'Delete Confirmation',
+        {
+            confirmButtonText: 'Yes, delete',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            ElMessage({
+                type: 'success',
+                message: 'Vehicle deleted successfully',
+            })
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'info',
+                message: 'Delete cancelled',
+            })
+        })
 }
+
 </script>
 
 <style scoped>
