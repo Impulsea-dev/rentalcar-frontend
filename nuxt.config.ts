@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
     ssr: false,
-    modules: ['@pinia/nuxt', 'nuxt-headlessui','@element-plus/nuxt'],
+    modules: ['@pinia/nuxt', 'nuxt-headlessui','@element-plus/nuxt','maz-ui/nuxt'],
     devtools: { enabled: false },
     app: {
         head: {
@@ -28,7 +28,7 @@ export default defineNuxtConfig({
         pageTransition: { name: 'page', mode: 'out-in' },
     },
     build: {
-        transpile: ['vue3-form-wizard', 'element-plus', 'vue3-popper']
+        transpile: ['vue3-form-wizard', 'element-plus', 'vue3-popper', 'maz-ui', 'libphonenumber-js']
     },
     // routeRules: {
     //     '/api/**': { proxy: { to: 'http://132.145.138.37:2525/' } }

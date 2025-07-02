@@ -15,7 +15,7 @@
         <AdminPromotions />
       </el-tab-pane>
       <el-tab-pane label="Users" name="users">
-        <span>Hola</span>
+        <Users />
       </el-tab-pane>
     </el-tabs>
   </section>
@@ -24,7 +24,8 @@
 <script setup>
 import { ref } from 'vue'
 import Reservations from '@/components/admin/reservations/index.vue'
+import Users from '@/components/admin/users/index.vue'
 
-const activeTab = ref('reservations')
+const activeTab = ref('users')
 </script>
 <style></style>
