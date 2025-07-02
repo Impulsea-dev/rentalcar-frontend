@@ -22,6 +22,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['auth'],
+  layout: 'logged-layout'
+})
 import { ref } from 'vue'
 import Reservations from '@/components/admin/reservations/index.vue'
 import Users from '@/components/admin/users/index.vue'

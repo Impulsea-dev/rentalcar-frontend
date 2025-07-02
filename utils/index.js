@@ -1,16 +1,20 @@
 export async function getAllCountries() {
     try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
-        const countries = data.map(country => country.name.common);
-        countries.sort((a, b) => a.localeCompare(b));
+        const res = await fetch('https://restcountries.com/v3.1/all?fields=name');
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const data = await res.json();
+        const countries = data
+            .map(c => c.name?.common)
+            .filter(Boolean)
+            .sort((a, b) => a.localeCompare(b));
 
         return countries;
-    } catch (error) {
-        console.error('Error to get all countries:', error);
+    } catch (e) {
+        console.error('Error fetching countries:', e);
         return [];
     }
 }
+
 
 export async function getCurrentCountry() {
     try {

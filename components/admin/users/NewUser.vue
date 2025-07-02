@@ -47,13 +47,11 @@ import GeneralForm from './GeneralForm.vue';
 const showModal = ref(false)
 const activeTab = ref('general')
 const user = reactive({
-  id: '',
   avatar_url: '',
   blacklist_status: {
     is_blacklisted: false,
     reason: ''
   },
-  company_id: '',
   email: '',
   role: 'customer',
   status: 'active',

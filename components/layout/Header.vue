@@ -2,7 +2,6 @@
     <header class="flex justify-between items-center fixed top-0 w-full py-4 px-5 md:px-10 bg-background z-30">
         <div class="flex flex-grow basis-0 text-white">
             <NuxtLink to="/">
-                <!-- <img src="/logo.png" class="w-[171px] h-10" alt=""> -->
                 <Logo />
             </NuxtLink>
         </div>

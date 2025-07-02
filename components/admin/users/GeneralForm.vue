@@ -1,6 +1,6 @@
 <template>
     <el-form label-position="top" class="grid md:grid-cols-2 gap-4">
-             <!-- Personal Info -->
+        <!-- Personal Info -->
         <el-form-item label="First Name">
             <el-input v-model="modelValue.personal_info.first_name" size="large" />
         </el-form-item>
@@ -8,15 +8,12 @@
             <el-input v-model="modelValue.personal_info.last_name" size="large" />
         </el-form-item>
         <el-form-item label="Phone">
-            <MazPhoneNumberInput
-                v-model="modelValue.personal_info.phone"
-                show-code-on-list
-                :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']"
-                class="w-full"
-            />
+            <MazPhoneNumberInput v-model="modelValue.personal_info.phone" show-code-on-list
+                :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']" class="w-full" />
         </el-form-item>
         <el-form-item label="Birthdate">
-            <el-date-picker v-model="modelValue.personal_info.birthdate" type="date" size="large" style="width: 100%;" />
+            <el-date-picker v-model="modelValue.personal_info.birthdate" type="date" size="large"
+                style="width: 100%;" />
         </el-form-item>
 
         <el-form-item label="Email">
@@ -50,17 +47,38 @@
             <el-input v-model="modelValue.license_info.number" size="large" />
         </el-form-item>
         <el-form-item label="Issued Date">
-            <el-date-picker v-model="modelValue.license_info.issued_date" type="date" size="large" style="width: 100%;" />
+            <el-date-picker v-model="modelValue.license_info.issued_date" type="date" size="large"
+                style="width: 100%;" />
         </el-form-item>
         <el-form-item label="Expiry Date">
-            <el-date-picker v-model="modelValue.license_info.expiry_date" type="date" size="large" style="width: 100%;" />
+            <el-date-picker v-model="modelValue.license_info.expiry_date" type="date" size="large"
+                style="width: 100%;" />
         </el-form-item>
+        <!-- País de la licencia -->
         <el-form-item label="License Country">
-            <el-input v-model="modelValue.license_info.country" size="large" />
+            <el-select v-model="modelValue.license_info.country" placeholder="Select country" filterable size="large">
+                <el-option v-for="country in countries" :key="country" :label="country" :value="country" />
+            </el-select>
         </el-form-item>
     </el-form>
 </template>
 
 <script setup>
+import { getAllCountries } from "@/utils/index";
+const countries = ref([]);
+
+onMounted(() => {
+    getCountry()
+})
+
+const getCountry = () => {
+    getAllCountries()
+        .then(response => {
+            countries.value = response
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
 defineProps({ modelValue: Object })
 </script>

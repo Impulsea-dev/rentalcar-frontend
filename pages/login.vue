@@ -21,34 +21,26 @@
         <form class="space-y-5" @submit.prevent="handleLogin">
           <div>
             <label for="email" class="block mb-2 text-base font-semibold text-[#212529]">Email</label>
-            <input
-              type="email"
-              id="email"
-              v-model="user.email"
+            <input type="email" id="email" v-model="user.email"
               class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#00BEA1] focus:outline-none"
-              placeholder="you@example.com"
-            />
+              placeholder="you@example.com" />
           </div>
           <div>
             <label for="password" class="block mb-2 text-base font-semibold text-[#212529]">Password</label>
-            <input
-              type="password"
-              id="password"
-              v-model="user.password"
+            <input type="password" id="password" v-model="user.password"
               class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#00BEA1] focus:outline-none"
-              placeholder="••••••••"
-              autocomplete="on"
-            />
+              placeholder="••••••••" autocomplete="on" />
           </div>
 
           <div class="flex justify-end">
             <NuxtLink to="#" class="text-sm text-[#00BEA1] hover:underline">Forgot password?</NuxtLink>
           </div>
 
-          <button
-            type="submit"
-            class="w-full bg-[#00BEA1] text-white font-semibold py-3 rounded-xl hover:bg-opacity-90 transition-all duration-300"
-          >
+          <button type="submit"
+            class="w-full bg-[#00BEA1] text-white font-semibold py-3 rounded-xl hover:bg-opacity-90 transition-all duration-300 flex justify-center items-center gap-1">
+            <el-icon v-if="isLoading" class="animate-spin" size="18">
+              <Loading />
+            </el-icon>
             Sign In
           </button>
 
@@ -63,11 +55,17 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['guest-only'],
+})
 import Shield from "../assets/images/shield.svg"
 import Thunder from "../assets/images/Thunder.svg"
 import Percentage from "../assets/images/percentage.svg"
 import Dollar from "../assets/images/dollar.svg"
 import Like from "../assets/images/like.svg"
+import { Loading } from "@element-plus/icons-vue"
+import { Login } from "@/composables/auth";
+import { ElNotification } from 'element-plus'
 
 const benefits = [
   { title: 'Secure payments through reliable partners', icon: Shield },
@@ -81,9 +79,26 @@ const user = ref({
   email: '',
   password: ''
 })
+const isLoading = ref(false)
 
-const handleLogin = () => {
-  // Aquí puedes manejar tu lógica de login
-  console.log('Logging in...', user.value)
+const handleLogin = async () => {
+  isLoading.value = true
+  let auth = {}
+  await Login(user.value).then(response => {
+    auth = response.data
+    localStorage.setItem('auth', JSON.stringify(auth))
+    if (auth.user.role === 'admin') navigateTo('/admin');
+    else if (auth.user.role === 'staff') navigateTo('/staff');
+  }).catch(error => {
+    ElNotification({
+      title: 'Error',
+      message: error.response.data.error,
+      type: 'error',
+        position: 'bottom-right'
+    })
+
+  }).finally(() => {
+    isLoading.value = false
+  })
 }
 </script>

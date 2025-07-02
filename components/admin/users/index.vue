@@ -15,7 +15,28 @@
 <script setup>
 import NewUser from './NewUser.vue';
 import { Search } from '@element-plus/icons-vue'
+import { getUsers } from '@/composables/users'
 const search = ref('')
+const currentPage = ref(1)
+const itemsPerPage = ref(20)
+const totalUsers = ref(0)
+const users = ref([])
+const user = JSON.parse(localStorage.getItem('auth'))
+
+onMounted(async () => {
+    await fetchUsers()
+})
+
+const fetchUsers = async () => {
+    await getUsers(currentPage.value, itemsPerPage.value, '', '', user.token).then((response) => {
+      console.log(response.data)
+        // users.value = response.data.items
+        // itemsPerPage.value = response.data.page_size
+        // totalUsers.value = response.data.total
+    }).catch((error) => {
+        console.log(error)
+    })
+}
 </script>
 <style scoped>
 .search-input {
