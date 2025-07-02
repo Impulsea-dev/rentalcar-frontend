@@ -45,7 +45,7 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
-    plugins: ['vue-tel-input'],
+
     compatibilityDate: '2024-08-14',
     nitro: {
           devProxy: {

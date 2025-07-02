@@ -19,19 +19,33 @@
             </el-form-item>
 
             <el-form-item label="Phone" prop="phone">
-                <client-only>
-                    <vue-tel-input v-if="countrycode" v-model="formData.phone" @validate="phoneObject"
-                        :mode="'international'" :defaultCountry="countrycode.trim()"
-                        :invalidMsg="'Please enter a valid phone number'" validCharactersOnly
-                        class="h-10 !rounded w-full" :dropdownOptions="{
-                            disabled: false,
-                            showDialCodeInList: false,
-                            showDialCodeInSelection: false,
-                            showFlags: true,
-                            showSearchBox: true,
-                            tabindex: 0
-                        }" />
-                </client-only>
+                <!-- Enhanced phone input with better auto-detection -->
+                <MazPhoneNumberInput
+                    v-model="formData.phone"
+                    v-model:country-code="phoneCountryCode"
+                    :default-country-code="phoneCountryCode || detectedPhoneCountry"
+                    show-code-on-list
+                    :no-use-browser-locale="false"
+                    :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']"
+                    :translations="{
+                        countrySelector: {
+                            placeholder: 'Country code',
+                            error: 'Choose country',
+                            searchPlaceholder: 'Search countries...'
+                        },
+                        phoneNumber: {
+                            placeholder: 'Phone number',
+                            error: 'Invalid phone number'
+                        }
+                    }"
+                    @update="onPhoneUpdate"
+                    class="w-full"
+                />
+                <!-- Debug info for phone detection -->
+                <div v-if="showPhoneDebug" class="text-xs text-gray-500 mt-1">
+                    <span>Detected: {{ detectedPhoneCountry || 'Auto-detecting...' }}</span>
+                    <span v-if="phoneDetectionMethod"> via {{ phoneDetectionMethod }}</span>
+                </div>
             </el-form-item>
 
             <el-form-item label="Country" prop="country">
@@ -48,11 +62,21 @@
 </template>
 
 <script setup>
-import { ref, watch, getCurrentInstance } from 'vue'
+import { ref, watch, getCurrentInstance, onMounted } from 'vue'
 import { getAllCountries, getCurrentCountry } from '~/utils/'
 
 const formRef = ref(null)
 const instance = getCurrentInstance()
+
+// Import country detection composable
+const { 
+    detectCountry, 
+    detectedCountry, 
+    detectionMethod, 
+    isDetecting,
+    getBrowserLocaleCountry,
+    detectCountryByIP
+} = useCountryDetection()
 
 const formData = ref({
     fname: '',
@@ -64,15 +88,36 @@ const formData = ref({
 })
 
 const countries = ref([])
-const countrycode = ref(null)
+const phoneCountryCode = ref() 
+
+// Phone detection state
+const detectedPhoneCountry = ref('')
+const phoneDetectionMethod = ref('')
+const showPhoneDebug = ref(true)
 
 const getFormData = () => {
   return { ...formData.value }
 }
 
-
-const phoneObject = () => {
-    // Puedes implementar validación adicional del número si lo necesitas
+const onPhoneUpdate = (results) => {
+    // Enhanced phone validation with better logging
+    console.log('Phone validation results:', results)
+    console.log('Current country code:', phoneCountryCode.value)
+    
+    // Update detection info
+    if (phoneCountryCode.value) {
+        detectedPhoneCountry.value = phoneCountryCode.value
+        phoneDetectionMethod.value = 'user-input'
+    }
+    
+    // Optional: Show toast for validation feedback
+    if (results && results.isValid) {
+        console.log('Valid phone number detected')
+        // Could show success toast here
+    } else if (formData.value.phone && formData.value.phone.length > 3) {
+        console.log('Invalid phone number format')
+        // Could show error toast here
+    }
 }
 
 const rules = {
@@ -102,15 +147,54 @@ const getCountry = () => {
     getCurrentCountry()
         .then(response => {
             formData.value.country = response.country_name
-            countrycode.value = response.country_code
+            // Don't override phoneCountryCode - let Maz-UI auto-detect
+            console.log('IP Country detected for address:', response.country_code)
         })
         .catch(error => {
-            console.log(error)
+            console.log('Failed to get country for address:', error)
         })
 }
 
-allCountries()
-getCountry()
+// Enhanced initialization
+const initializeForm = async () => {
+    console.log('Initializing reservation form...')
+    
+    // Load countries list
+    allCountries()
+    
+    // Get country for address field
+    getCountry()
+    
+    // Immediate browser locale detection using composable
+    const browserCountry = getBrowserLocaleCountry()
+    console.log('Browser locale country:', browserCountry)
+    
+    // Set immediately for better UX
+    if (!phoneCountryCode.value) {
+        phoneCountryCode.value = browserCountry
+        detectedPhoneCountry.value = browserCountry
+        phoneDetectionMethod.value = 'browser-locale'
+    }
+    
+    // Enhanced phone country detection (will override if different)
+    try {
+        // Try IP detection for more accuracy
+        const ipDetected = await detectCountryByIP()
+        if (ipDetected && ipDetected !== browserCountry) {
+            console.log('Updating phone country to:', ipDetected)
+            phoneCountryCode.value = ipDetected
+            detectedPhoneCountry.value = ipDetected
+            phoneDetectionMethod.value = 'ip-geolocation'
+        }
+    } catch (error) {
+        console.warn('Phone country detection failed:', error)
+    }
+}
+
+// Initialize on mount
+onMounted(() => {
+    initializeForm()
+})
 
 const validateForm = () => {
     return formRef.value?.validate();

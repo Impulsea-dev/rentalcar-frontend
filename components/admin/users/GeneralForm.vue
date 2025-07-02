@@ -8,7 +8,12 @@
             <el-input v-model="modelValue.personal_info.last_name" size="large" />
         </el-form-item>
         <el-form-item label="Phone">
-            <el-input v-model="modelValue.personal_info.phone" size="large" />
+            <MazPhoneNumberInput
+                v-model="modelValue.personal_info.phone"
+                show-code-on-list
+                :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']"
+                class="w-full"
+            />
         </el-form-item>
         <el-form-item label="Birthdate">
             <el-date-picker v-model="modelValue.personal_info.birthdate" type="date" size="large" style="width: 100%;" />

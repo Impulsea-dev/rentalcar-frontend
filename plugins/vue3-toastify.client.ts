@@ -2,9 +2,19 @@ import Vue3Toastify, { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(Vue3Toastify, { autoClose: 1000 });
+  nuxtApp.vueApp.use(Vue3Toastify, { 
+    autoClose: 3000,
+    position: 'top-right',
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
 
   return {
-    provide: { toast },
+    provide: { 
+      vueToast: toast,
+      notify: toast
+    },
   };
-});
+}); 
