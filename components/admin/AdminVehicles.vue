@@ -14,7 +14,7 @@
         </div>
 
         <!-- Table -->
-        <el-table :data="vehicles" style="width: 100%" :border="true" :highlight-current-row="true">
+        <el-table :data="vehicles" style="width: 100%; min-height: 400px;" :border="true" :highlight-current-row="true">
             <el-table-column prop="class" label="Class" />
             <el-table-column prop="brand.name" label="Brand" />
             <el-table-column prop="model" label="Model" />
@@ -39,6 +39,11 @@
                     </el-dropdown>
                 </template>
             </el-table-column>
+            <template #empty>
+                <div class="flex flex-col items-center justify-center h-40">
+                    <span>No vehicles found</span>
+                </div>
+            </template>
         </el-table>
 
         <!-- Pagination -->

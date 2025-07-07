@@ -2,6 +2,12 @@
     <div>
         <div class="flex items-center justify-end mb-6 gap-4">
             <NewUser />
+            <el-select v-model="selectedRole" placeholder="Filter by role" size="large">
+                <el-option v-for="role in roles" :key="role.label" :label="role.label" :value="role.value" />
+            </el-select>
+            <el-select v-model="selectedStatus" placeholder="Filter by status" size="large">
+                <el-option v-for="status in allStatus" :key="status.label" :label="status.label" :value="status.value" />
+            </el-select>
             <el-input v-model="search" placeholder="Search here..." clearable class="search-input" size="large">
                 <template #prefix>
                     <el-icon>
@@ -10,7 +16,7 @@
                 </template>
             </el-input>
         </div>
-        <el-table :data="users" style="width: 100%" :border="true" :highlight-current-row="true">
+        <el-table :data="users" style="width: 100%; min-height: 400px;" :border="true" :highlight-current-row="true">
             <el-table-column prop="profile.first_name" label="First Name" />
             <el-table-column prop="profile.last_name" label="Last Name" />
             <el-table-column prop="role" label="Role" />
@@ -40,6 +46,11 @@
                     </el-dropdown>
                 </template>
             </el-table-column>
+            <template #empty>
+                <div class="flex flex-col items-center justify-center h-40">
+                    <span>No users found</span>
+                </div>
+            </template>
         </el-table>
         <div class="flex justify-end mt-6">
             <el-pagination background layout="prev, pager, next" :total="totalUsers" :page-size="itemsPerPage"
@@ -56,6 +67,8 @@ import EditUser from './EditUser.vue';
 import { Search } from '@element-plus/icons-vue'
 import { getUsers } from '@/composables/users'
 import { MoreFilled } from '@element-plus/icons-vue';
+import { allStatus, roles } from '@/utils/data'
+import { te } from 'element-plus/es/locale';
 const search = ref('')
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
@@ -65,12 +78,21 @@ const editModalVisible = ref(false)
 const userToEdit = reactive({})
 const user = JSON.parse(localStorage.getItem('auth'))
 
+const selectedRole = ref('')
+const selectedStatus = ref('')
+
 onMounted(async () => {
     await fetchUsers()
 })
 
+watch([selectedRole, selectedStatus], () => {
+    currentPage.value = 1;
+    fetchUsers();
+});
+
+
 const fetchUsers = async () => {
-    await getUsers(currentPage.value, itemsPerPage.value, '', '', user.token).then((response) => {
+    await getUsers(currentPage.value, itemsPerPage.value, selectedStatus.value, selectedRole.value, user.token).then((response) => {
         users.value = response.users
         itemsPerPage.value = response.page_size
         totalUsers.value = response.total
@@ -101,7 +123,7 @@ const getStatusType = (status) => {
 
 const editUser = (user) => {
     Object.assign(userToEdit, user)
-    
+
     editModalVisible.value = true
 }
 
@@ -110,5 +132,9 @@ const editUser = (user) => {
 <style scoped>
 .search-input {
     width: 240px;
+}
+
+.el-select {
+    width: 160px;
 }
 </style>

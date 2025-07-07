@@ -58,32 +58,37 @@
 <script setup>
 import { ref, watchEffect } from 'vue'
 const props = defineProps({ modelValue: Object })
+import { getVehicles } from '@/composables/vehicles'
+import { getUsers } from '@/composables/users'
 
 const customerInput = ref('')
 const vehicleInput = ref('')
 const locationName = ref('Airport Plaza, George Town')
+const user = JSON.parse(localStorage.getItem('auth'))
 
-function fetchCustomers(query, cb) {
-    const results = [
-        { value: 'cus_123', label: 'John Doe' },
-        { value: 'cus_456', label: 'Jane Smith' }
-    ].filter(item => item.label.toLowerCase().includes(query.toLowerCase()))
-    cb(results)
+const fetchCustomers = async (query, cb) => {
+    await getUsers(1, 10, '', '', user.token).then((response) => {
+        const results = response.users.map(item => ({ value: item.profile.first_name + ' ' + item.profile.last_name, id: item.id }))
+        cb(results)
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
-function fetchVehicles(query, cb) {
-    const results = [
-        { value: 'veh_001', label: 'Toyota Corolla' },
-        { value: 'veh_002', label: 'Honda Civic' }
-    ].filter(item => item.label.toLowerCase().includes(query.toLowerCase()))
-    cb(results)
+const fetchVehicles = async (query, cb) => {
+    await getVehicles(1, 10, '', query, '', '').then((response) => {
+        const results = response.data.items.map(item => ({ value: item.model + ' ' + item.color, id: item.id }))
+        cb(results)
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
 function onCustomerSelect(item) {
     props.modelValue.customer_id = item.value
 }
 function onVehicleSelect(item) {
-    props.modelValue.vehicle_id = item.value
+    props.modelValue.vehicle_id = item.id
 }
 
 

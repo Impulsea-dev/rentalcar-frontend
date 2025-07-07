@@ -1,7 +1,11 @@
 <template>
     <div>
         <button @click="openModal"
-            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-medium">New
+            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-normal flex justify-center items-center gap-1">
+            <el-icon size="14">
+                <Plus />
+            </el-icon>
+            New
             User</button>
 
         <Transition name="modal-fade-slide">
@@ -18,8 +22,8 @@
                             <GeneralForm v-model="user" />
                         </el-tab-pane>
                         <el-tab-pane label="Additional Info" name="additional">
-                        <AdditionalForm v-model="user" />
-                    </el-tab-pane>
+                            <AdditionalForm v-model="user" />
+                        </el-tab-pane>
                     </el-tabs>
                     <div class="flex justify-end pt-4">
                         <button @click="saveUser"
@@ -47,35 +51,35 @@ import GeneralForm from './GeneralForm.vue';
 const showModal = ref(false)
 const activeTab = ref('general')
 const user = reactive({
-  avatar_url: '',
-  blacklist_status: {
-    is_blacklisted: false,
-    reason: ''
-  },
-  email: '',
-  role: 'customer',
-  status: 'active',
-  payment_methods: [],
-  personal_info: {
-    first_name: '',
-    last_name: '',
-    phone: '',
-    birthdate: ''
-  },
-  license_info: {
-    number: '',
-    issued_date: '',
-    expiry_date: '',
-    country: ''
-  },
-  preferences: {},
-  preferred_locations: [],
-  special_requests: [],
-  profile: {
-    bio: '',
-    language: '',
-    timezone: ''
-  }
+    avatar_url: '',
+    blacklist_status: {
+        is_blacklisted: false,
+        reason: ''
+    },
+    email: '',
+    role: 'customer',
+    status: 'active',
+    payment_methods: [],
+    personal_info: {
+        first_name: '',
+        last_name: '',
+        phone: '',
+        birthdate: ''
+    },
+    license_info: {
+        number: '',
+        issued_date: '',
+        expiry_date: '',
+        country: ''
+    },
+    preferences: {},
+    preferred_locations: [],
+    special_requests: [],
+    profile: {
+        bio: '',
+        language: '',
+        timezone: ''
+    }
 })
 
 const saveUser = () => {

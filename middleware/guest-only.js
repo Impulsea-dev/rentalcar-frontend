@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(() => {
   const role = user.user.role;
 
   if (role === 'admin') return navigateTo('/admin');
-  if (role === 'manager') return navigateTo('/manager');
+  if (role === 'customer') return navigateTo('/customer');
   if (role === 'staff') return navigateTo('/staff');
   return navigateTo('/unauthorized');
 });

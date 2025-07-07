@@ -1,7 +1,11 @@
 <template>
     <div>
         <button @click="openModal"
-            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-medium">New
+            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-normal flex justify-center items-center gap-1">
+            <el-icon size="14">
+                <Plus />
+            </el-icon>
+            New
             Reservation</button>
 
         <Transition name="modal-fade-slide">
@@ -13,6 +17,7 @@
                     </el-icon>
                 </div>
                 <div class="p-4 flex flex-col flex-grow overflow-y-auto">
+                                    <!-- <span>{{ reservation }}</span> -->
                     <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
                         <el-tab-pane label="General Info" name="general">
                             <ReservationCustomer v-model="reservation" />
@@ -51,6 +56,8 @@ const activeTab = ref('general')
 const reservation = reactive({
     status: 'pending',
     version: 1,
+    customer_id: '',
+    vehicle_id: '',
     pickup_date: '',
     return_date: '',
     pickup_location_id: '',

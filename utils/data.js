@@ -232,3 +232,26 @@ export const typeOptionsShort = [{
   name: 'Pickup Truck',
   value: '6d332213-a698-4598-a987-059d3e1babfd'
 }]
+
+
+export const allStatus = [{
+    label: 'Active',
+    value: 'active'
+}, {
+    label: 'Inactive',
+    value: 'inactive'
+}, {
+    label: 'Suspended',
+    value: 'suspended'
+}]
+
+export const roles = [{
+    label: 'Admin',
+    value: 'admin'
+}, {
+    label: 'Staff',
+    value: 'staff'
+}, {
+    label: 'Customer',
+    value: 'customer'
+}]

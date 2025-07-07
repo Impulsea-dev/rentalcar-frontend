@@ -3,6 +3,11 @@
         <Transition name="modal-fade-slide">
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
                 v-show="showModal">
+                                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
+                    <el-icon size="20" color="gray">
+                        <CloseBold />
+                    </el-icon>
+                </div>
                 <div class="p-4 flex flex-col flex-grow overflow-hidden">
                     <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
                         <el-tab-pane label="General" name="general">
@@ -45,7 +50,7 @@ import { ref, watch, reactive } from 'vue'
 import VehicleGeneralForm from '@/components/admin/vehicles/GeneralForm.vue'
 import VehicleFeaturesForm from '@/components/admin/vehicles/FeaturesForm.vue'
 import VehiclePricingForm from '@/components/admin/vehicles/PricingForm.vue'
-import { Loading, Edit } from '@element-plus/icons-vue'
+import { Loading, Edit, CloseBold } from '@element-plus/icons-vue'
 
 const props = defineProps({
     vehicle: Object,

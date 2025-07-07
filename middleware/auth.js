@@ -10,15 +10,15 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo('/admin');
   }
 
-  if (role === 'manager' && !to.path.startsWith('/manager')) {
-    return navigateTo('/manager');
+  if (role === 'customer' && !to.path.startsWith('/customer')) {
+    return navigateTo('/customer');
   }
 
   if (role === 'staff' && !to.path.startsWith('/staff')) {
     return navigateTo('/staff');
   }
 
-  if (!['admin', 'manager', 'staff'].includes(role)) {
+  if (!['admin', 'customer', 'staff'].includes(role)) {
     return navigateTo('/unauthorized');
   }
 });

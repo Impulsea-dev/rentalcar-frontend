@@ -1,12 +1,21 @@
 <template>
     <div>
         <button @click="openModal"
-            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-medium">New
+            class="bg-economy text-white rounded px-4 py-2 border border-economy hover:bg-economy/80 transition-all duration-300 font-normal flex justify-center items-center gap-1">
+            <el-icon size="14">
+                <Plus />
+            </el-icon>
+            New
             Vehicle</button>
 
         <Transition name="modal-fade-slide">
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
                 v-show="showModal">
+                                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
+                    <el-icon size="20" color="gray">
+                        <CloseBold />
+                    </el-icon>
+                </div>
                 <div class="py-10 flex flex-col flex-grow overflow-y-auto">
                     <el-steps :active="activeStep" finish-status="success" align-center class="custom-steps">
                         <el-step title="General" />
@@ -61,6 +70,7 @@
     </div>
 </template>
 <script setup>
+import { Plus, CloseBold } from '@element-plus/icons-vue'
 import GeneralForm from './GeneralForm.vue';
 import FeaturesForm from './FeaturesForm.vue';
 import PricingForm from './PricingForm.vue';
@@ -93,7 +103,7 @@ const vehicle = reactive({
     luggage_capacity: 0,
     fuel_type: '',
     transmission: '',
-    images:[]
+    images: []
 })
 
 
@@ -108,7 +118,7 @@ const closeModal = () => {
 };
 
 const next = async () => {
-     if (activeStep.value < totalSteps - 1) {
+    if (activeStep.value < totalSteps - 1) {
         activeStep.value++
     }
 }

@@ -89,6 +89,7 @@ const handleLogin = async () => {
     localStorage.setItem('auth', JSON.stringify(auth))
     if (auth.user.role === 'admin') navigateTo('/admin');
     else if (auth.user.role === 'staff') navigateTo('/staff');
+    else if (auth.user.role === 'customer') navigateTo('/customer');
   }).catch(error => {
     ElNotification({
       title: 'Error',
