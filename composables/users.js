@@ -1,9 +1,6 @@
 import axios from "axios";
 
 export const getUsers = async (page = 1, page_size = 20, status = '', role = '', token) => {
-    console.log(token);
-    
-
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -22,7 +19,6 @@ export const getUsers = async (page = 1, page_size = 20, status = '', role = '',
   if (role) params.append('role', role);
 
   const url = `/api/v1/users?${params.toString()}`;
-  
   try {
     const response = await axios.get(url, config);
     return response.data;
