@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getUsers = async (page = 1, page_size = 20, status = '', role = '', token) => {
+export const getUsers = async (page = 1, page_size = 20, query='', status = '', role = '', token) => {
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -15,6 +15,7 @@ export const getUsers = async (page = 1, page_size = 20, status = '', role = '',
   const params = new URLSearchParams();
   if (page) params.append('page', page);
   if (page_size) params.append('page_size', page_size);
+  if (query) params.append('query', query);
   if (status) params.append('status', status);
   if (role) params.append('role', role);
 

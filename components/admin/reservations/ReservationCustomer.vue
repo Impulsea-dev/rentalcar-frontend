@@ -67,7 +67,7 @@ const locationName = ref('Airport Plaza, George Town')
 const user = JSON.parse(localStorage.getItem('auth'))
 
 const fetchCustomers = async (query, cb) => {
-    await getUsers(1, 10, '', '', user.token).then((response) => {
+    await getUsers(1, 10, query, '', 'customer', user.token).then((response) => {
         const results = response.users.map(item => ({ value: item.profile.first_name + ' ' + item.profile.last_name, id: item.id }))
         cb(results)
     }).catch((error) => {
