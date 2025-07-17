@@ -27,3 +27,27 @@ export const getReservations = async (page = 1, page_size = 20, token) => {
         throw error;
     }
 }
+
+export const save = async (data, token) => {
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const url = '/api/v1/reservations';
+    try {
+        const response = await axios.post(url, data, config);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            throw new Error('Authentication expired');
+        }
+        throw error;
+    }
+}

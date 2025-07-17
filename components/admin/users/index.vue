@@ -6,7 +6,8 @@
                 <el-option v-for="role in roles" :key="role.label" :label="role.label" :value="role.value" />
             </el-select>
             <el-select v-model="selectedStatus" placeholder="Filter by status" size="large">
-                <el-option v-for="status in allStatus" :key="status.label" :label="status.label" :value="status.value" />
+                <el-option v-for="status in allStatus" :key="status.label" :label="status.label"
+                    :value="status.value" />
             </el-select>
             <el-input v-model="search" placeholder="Search here..." clearable class="search-input" size="large">
                 <template #prefix>
@@ -68,7 +69,6 @@ import { Search } from '@element-plus/icons-vue'
 import { getUsers } from '@/composables/users'
 import { MoreFilled } from '@element-plus/icons-vue';
 import { allStatus, roles } from '@/utils/data'
-import { te } from 'element-plus/es/locale';
 const search = ref('')
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
@@ -85,14 +85,14 @@ onMounted(async () => {
     await fetchUsers()
 })
 
-watch([selectedRole, selectedStatus], () => {
+watch([selectedRole, selectedStatus, search], () => {
     currentPage.value = 1;
     fetchUsers();
 });
 
 
 const fetchUsers = async () => {
-    await getUsers(currentPage.value, itemsPerPage.value, selectedStatus.value, selectedRole.value, user.token).then((response) => {
+    await getUsers(currentPage.value, itemsPerPage.value, search.value, selectedStatus.value, selectedRole.value, user.token).then((response) => {
         users.value = response.users
         itemsPerPage.value = response.page_size
         totalUsers.value = response.total

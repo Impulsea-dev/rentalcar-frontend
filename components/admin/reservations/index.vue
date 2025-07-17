@@ -38,7 +38,6 @@ onMounted(() => {
 
 const getReservationsData = async () => {
     await getReservations(currentPage.value, itemsPerPage.value, user.token).then((response) => {
-        console.log(response);
         reservations.value = response
     }).catch((error) => {
         console.log(error)

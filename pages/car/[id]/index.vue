@@ -195,10 +195,10 @@ const getVehicleByIdData = async () => {
 
 function handleReservation() {
     // alert(`Reserving ${car.value.name}`)
-    router.push(`/car/${car.value.name}/reservation`)
+    router.push(`/car/${vehicle.value.name}/reservation`)
 }
 
 function handleContact() {
-    alert(`Contacting about ${car.value.name}`)
+    alert(`Contacting about ${vehicle.value.name}`)
 }
 </script>

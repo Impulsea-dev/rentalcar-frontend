@@ -12,8 +12,8 @@
                 :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']" class="w-full" />
         </el-form-item>
         <el-form-item label="Birthdate">
-            <el-date-picker v-model="modelValue.personal_info.birthdate" type="date" size="large"
-                style="width: 100%;" />
+            <el-date-picker v-model="modelValue.personal_info.birthdate" type="date" size="large" style="width: 100%;"
+                format="YYYY-MM-DD" value-format="YYYY-MM-DD" placeholder="Select or type a date" clearable />
         </el-form-item>
 
         <el-form-item label="Email">

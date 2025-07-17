@@ -17,7 +17,7 @@
                     </el-icon>
                 </div>
                 <div class="p-4 flex flex-col flex-grow overflow-y-auto">
-                                    <!-- <span>{{ reservation }}</span> -->
+                    <!-- <span>{{ reservation }}</span> -->
                     <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
                         <el-tab-pane label="General Info" name="general">
                             <ReservationCustomer v-model="reservation" />
@@ -51,6 +51,8 @@
 <script setup>
 import ReservationCustomer from './ReservationCustomer.vue';
 import { Plus, CloseBold, Close } from '@element-plus/icons-vue'
+import { ElNotification } from 'element-plus';
+import { save } from '@/composables/reservations'
 const showModal = ref(false)
 const activeTab = ref('general')
 const reservation = reactive({
@@ -67,14 +69,26 @@ const reservation = reactive({
     daily_rate: { value: 0 },
     deposit: { value: 0 },
     insurance: null,
-    payment_info: { method: 'credit_card' },    
+    payment_info: { method: 'credit_card' },
     preferences: null,
     notes: [],
     modifications: []
 })
 
-const saveReservation = () => {
-    console.log(reservation)
+const user = JSON.parse(localStorage.getItem('auth'))
+
+const saveReservation = async () => {
+    console.log(reservation);
+    await save(reservation, user.token).then((response) => {
+        console.log(response)
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error'
+        })
+    })
 }
 
 

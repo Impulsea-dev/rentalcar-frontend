@@ -93,7 +93,7 @@ function onVehicleSelect(item) {
 
 
 watchEffect(() => {
-    props.modelValue.pickup_location = { name: locationName.value }
-    props.modelValue.return_location = { name: locationName.value }
+    props.modelValue.pickup_location = { city: locationName.value }
+    props.modelValue.return_location = { city: locationName.value }
 })
 </script>

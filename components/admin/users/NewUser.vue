@@ -26,7 +26,7 @@
                         </el-tab-pane>
                     </el-tabs>
                     <div class="flex justify-end pt-4">
-                        <button @click="saveUser"
+                        <button @click="saveNewUser"
                             class="flex justify-center items-center rounded-md px-4 py-2 text-sm bg-economy text-white transition-all duration-300 hover:opacity-60 gap-x-1">
                             <el-icon>
                                 <Plus />
@@ -48,6 +48,8 @@
 import { Plus, CloseBold, Close } from '@element-plus/icons-vue'
 import AdditionalForm from './AdditionalForm.vue';
 import GeneralForm from './GeneralForm.vue';
+import { saveUser } from '@/composables/users'
+import { ElNotification } from 'element-plus';
 const showModal = ref(false)
 const activeTab = ref('general')
 const user = reactive({
@@ -81,9 +83,23 @@ const user = reactive({
         timezone: ''
     }
 })
+const userLogged = JSON.parse(localStorage.getItem('auth'))
 
-const saveUser = () => {
-    console.log(user)
+const saveNewUser = async () => {
+    console.log(user);
+    console.log(userLogged.token);
+    
+    
+    await saveUser(user, userLogged.token).then((response) => {
+        console.log(response)
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error'
+        })
+    })
 }
 
 
