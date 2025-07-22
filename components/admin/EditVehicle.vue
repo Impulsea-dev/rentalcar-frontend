@@ -3,7 +3,7 @@
         <Transition name="modal-fade-slide">
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
                 v-show="showModal">
-                                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
+                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
                     <el-icon size="20" color="gray">
                         <CloseBold />
                     </el-icon>
@@ -51,11 +51,13 @@ import VehicleGeneralForm from '@/components/admin/vehicles/GeneralForm.vue'
 import VehicleFeaturesForm from '@/components/admin/vehicles/FeaturesForm.vue'
 import VehiclePricingForm from '@/components/admin/vehicles/PricingForm.vue'
 import { Loading, Edit, CloseBold } from '@element-plus/icons-vue'
+import { updateVehicleById } from "@/composables/vehicles";
 
 const props = defineProps({
     vehicle: Object,
     visible: Boolean
 })
+const userLogged = JSON.parse(localStorage.getItem('auth'))
 
 const showModal = ref(false)
 const emit = defineEmits(['close'])
@@ -82,10 +84,24 @@ const closeModal = () => {
 const activeTab = ref('general')
 
 
-const saveChanges = () => {
+const saveChanges = async () => {
     isUpdating.value = true
-    console.log('Saving vehicle', localVehicle)
-    closeModal()
+    await updateVehicleById(localVehicle.id, localVehicle, userLogged.token).then((response) => {
+        console.log(response)
+        ElNotification({
+            title: 'Success',
+            message: 'Vehicle updated successfully',
+            type: 'success'
+        })
+        closeModal()
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error'
+        })
+    })
 }
 </script>
 <style scoped>

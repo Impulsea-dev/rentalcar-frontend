@@ -43,7 +43,7 @@ export const saveUser = async (data, token) => {
     }
   };
 
-  const url = '/api/v1/users';
+  const url = '/api/v1/auth/register';
   try {
     const response = await axios.post(url, data, config);
     return response.data;

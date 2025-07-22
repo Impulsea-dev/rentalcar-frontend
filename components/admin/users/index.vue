@@ -18,8 +18,8 @@
             </el-input>
         </div>
         <el-table :data="users" style="width: 100%; min-height: 400px;" :border="true" :highlight-current-row="true">
-            <el-table-column prop="profile.first_name" label="First Name" />
-            <el-table-column prop="profile.last_name" label="Last Name" />
+            <el-table-column prop="first_name" label="First Name" />
+            <el-table-column prop="last_name" label="Last Name" />
             <el-table-column prop="role" label="Role" />
             <el-table-column prop="email" label="Email" />
             <el-table-column prop="status" label="Status" align="center">
@@ -94,6 +94,8 @@ watch([selectedRole, selectedStatus, search], () => {
 const fetchUsers = async () => {
     await getUsers(currentPage.value, itemsPerPage.value, search.value, selectedStatus.value, selectedRole.value, user.token).then((response) => {
         users.value = response.users
+        console.log(users.value);
+        
         itemsPerPage.value = response.page_size
         totalUsers.value = response.total
     }).catch((error) => {

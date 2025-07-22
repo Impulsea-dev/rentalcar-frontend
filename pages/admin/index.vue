@@ -30,6 +30,6 @@ import { ref } from 'vue'
 import Reservations from '@/components/admin/reservations/index.vue'
 import Users from '@/components/admin/users/index.vue'
 
-const activeTab = ref('reservations')
+const activeTab = ref('vehicles')
 </script>
 <style></style>

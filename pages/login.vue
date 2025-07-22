@@ -6,49 +6,49 @@
         <h2 class="text-2xl font-extrabold text-white">Why choose us?</h2>
         <ul class="space-y-4">
           <li v-for="bene in benefits" :key="bene.title" class="flex items-start gap-3">
-            <img :src="bene.icon" alt="icon" class="w-6 h-6">
+            <img :src="bene.icon" alt="icon" class="w-6 h-6" />
             <span class="text-base font-medium">{{ bene.title }}</span>
           </li>
         </ul>
       </div>
 
       <!-- Right (form) -->
-      <div class="p-8 sm:p-10">
+      <div class="p-8 sm:p-10 w-full">
         <div class="flex justify-center mb-4">
-          <img src="../assets/images/user.svg" alt="User" class="w-16 h-16">
+          <img src="../assets/images/user.svg" alt="User" class="w-16 h-16" />
         </div>
         <h1 class="text-center text-2xl font-bold text-[#212529] mb-6">Sign In to Your Account</h1>
-        <form class="space-y-5" @submit.prevent="handleLogin">
-          <div>
-            <label for="email" class="block mb-2 text-base font-semibold text-[#212529]">Email</label>
-            <input type="email" id="email" v-model="user.email"
-              class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#00BEA1] focus:outline-none"
-              placeholder="you@example.com" />
-          </div>
-          <div>
-            <label for="password" class="block mb-2 text-base font-semibold text-[#212529]">Password</label>
-            <input type="password" id="password" v-model="user.password"
-              class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-[#00BEA1] focus:outline-none"
-              placeholder="••••••••" autocomplete="on" />
-          </div>
+
+        <el-form @submit.prevent="handleLogin" class="space-y-5">
+          <el-form-item label="Email" label-position="top">
+            <el-input v-model="user.email" placeholder="you@example.com" size="large" />
+          </el-form-item>
+
+          <el-form-item label="Password" label-position="top">
+            <el-input v-model="user.password" :type="showPassword ? 'text' : 'password'" placeholder="••••••••"
+              size="large">
+              <template #suffix>
+                <el-icon :size="20" class="cursor-pointer text-gray-500 hover:text-[#00BEA1]" @click="togglePassword">
+                  <component :is="showPassword ? Hide : View" />
+                </el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
 
           <div class="flex justify-end">
             <NuxtLink to="#" class="text-sm text-[#00BEA1] hover:underline">Forgot password?</NuxtLink>
           </div>
 
-          <button type="submit"
-            class="w-full bg-[#00BEA1] text-white font-semibold py-3 rounded-xl hover:bg-opacity-90 transition-all duration-300 flex justify-center items-center gap-1">
-            <el-icon v-if="isLoading" class="animate-spin" size="18">
-              <Loading />
-            </el-icon>
+          <el-button type="primary" class="w-full !bg-[#00BEA1] hover:!bg-opacity-90" size="large" :loading="isLoading"
+            native-type="submit">
             Sign In
-          </button>
+          </el-button>
 
           <p class="text-sm text-center text-gray-500">
             Don’t have an account?
-            <NuxtLink to="#" class="text-[#00BEA1] font-semibold hover:underline">Sign up</NuxtLink>
+            <NuxtLink to="/signup" class="text-[#00BEA1] font-semibold hover:underline">Sign up</NuxtLink>
           </p>
-        </form>
+        </el-form>
       </div>
     </div>
   </section>
@@ -63,9 +63,10 @@ import Thunder from "../assets/images/Thunder.svg"
 import Percentage from "../assets/images/percentage.svg"
 import Dollar from "../assets/images/dollar.svg"
 import Like from "../assets/images/like.svg"
-import { Loading } from "@element-plus/icons-vue"
+import { Loading, View, Hide } from "@element-plus/icons-vue"
 import { Login } from "@/composables/auth";
 import { ElNotification } from 'element-plus'
+
 
 const benefits = [
   { title: 'Secure payments through reliable partners', icon: Shield },
@@ -80,6 +81,11 @@ const user = ref({
   password: ''
 })
 const isLoading = ref(false)
+const showPassword = ref(false)
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleLogin = async () => {
   isLoading.value = true
@@ -95,7 +101,7 @@ const handleLogin = async () => {
       title: 'Error',
       message: error.response.data.error,
       type: 'error',
-        position: 'bottom-right'
+      position: 'bottom-right'
     })
 
   }).finally(() => {
@@ -103,3 +109,15 @@ const handleLogin = async () => {
   })
 }
 </script>
+<style>
+.el-form-item__label {
+  color: #212529;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.el-button {
+ @apply rounded-lg px-6 py-3 text-sm bg-economy text-white transition-all duration-300 hover:opacity-60 gap-x-1 border-none;
+
+}
+</style>
