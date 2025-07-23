@@ -4,13 +4,19 @@
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
                 v-show="showModal">
                 <div class="p-4 flex flex-col flex-grow overflow-hidden">
-                    <el-tabs v-model="activeTab" class="flex-grow overflow-auto" v-if="visible">
+                    <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
+                        <el-icon size="20" color="gray">
+                            <CloseBold />
+                        </el-icon>
+                    </div>
+                    <el-tabs v-model="activeTab" class="flex-grow overflow-auto"
+                        v-if="visible && Object.keys(localUser).length > 0">
                         <el-tab-pane label="General Info" name="general">
-                            <GeneralForm v-model="localUser" />
+                            <GeneralFormEdit v-model="localUser" />
                         </el-tab-pane>
-                        <!-- <el-tab-pane label="Additional Info" name="additional">
-                            <AdditionalForm v-model="localUser" />
-                        </el-tab-pane> -->
+                        <el-tab-pane label="Additional Info" name="additional">
+                            <AdditionalFormEdit v-model="localUser" />
+                        </el-tab-pane>
                     </el-tabs>
 
                     <div class="flex justify-end pt-4">
@@ -28,8 +34,6 @@
                 </div>
             </div>
         </Transition>
-
-
         <Transition name="overlay-fade">
             <div v-if="showModal" class="overlay bg-[#111112] bg-opacity-50 fixed inset-0 z-[999]" @click="closeModal">
             </div>
@@ -39,9 +43,11 @@
 
 <script setup>
 import { ref, watch, reactive } from 'vue'
-import { Loading, Edit } from '@element-plus/icons-vue'
-import AdditionalForm from './AdditionalForm.vue';
-import GeneralForm from './GeneralForm.vue';
+import { Loading, Edit, CloseBold } from '@element-plus/icons-vue'
+import AdditionalFormEdit from './AdditionalFormEdit.vue';
+import GeneralFormEdit from './GeneralFormEdit.vue';
+import { getUserById, updateUserById } from "@/composables/users";
+import { lo } from 'element-plus/es/locale';
 
 const props = defineProps({
     user: Object,
@@ -51,12 +57,14 @@ const props = defineProps({
 const showModal = ref(false)
 const emit = defineEmits(['close'])
 const localUser = reactive({})
+const userLogged = JSON.parse(localStorage.getItem('auth'))
+
 const isUpdating = ref(false)
 
 watch(() => props.visible, (val) => {
     if (val && props.user) {
+        getUserByIdData()
         openModal()
-        Object.assign(localUser, props.user)
     }
 })
 
@@ -73,10 +81,36 @@ const closeModal = () => {
 const activeTab = ref('general')
 
 
-const saveChanges = () => {
+const saveChanges = async () => {
     isUpdating.value = true
-    console.log('Saving vehicle', localVehicle)
-    closeModal()
+    console.log(localUser);
+    
+    await updateUserById(props.user.public_id, localUser, userLogged.token).then((response) => {
+        ElNotification({
+            title: 'Success',
+            message: 'User updated successfully',
+            type: 'success'
+        })
+        closeModal()
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error'
+        })
+    }).finally(() => {
+        isUpdating.value = false
+    })
+}
+
+const getUserByIdData = async () => {
+    await getUserById(props.user.public_id, userLogged.token).then((response) => {
+        Object.assign(localUser, response)
+        console.log(localUser);
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 </script>
 <style scoped>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getUsers = async (page = 1, page_size = 20, query='', status = '', role = '', token) => {
+export const getUsers = async (page = 1, page_size = 20, query = '', status = '', role = '', token) => {
   if (!token) {
     throw new Error('No authentication token found');
   }
@@ -54,3 +54,51 @@ export const saveUser = async (data, token) => {
     throw error;
   }
 };
+
+export const getUserById = async (id, token) => {
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const url = `/api/v1/users/${id}`;
+  try {
+    const response = await axios.get(url, config);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error('Authentication expired');
+    }
+    throw error;
+  }
+};
+
+export const updateUserById = async (id, data, token) => {
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  };
+  const url = `/api/v1/users/${id}`;
+  try {
+    const response = await axios.put(url, data, config);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error('Authentication expired');
+    }
+    throw error;
+  }
+
+} 

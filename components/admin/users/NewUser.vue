@@ -21,7 +21,7 @@
                         <el-tab-pane label="General Info" name="general">
                             <GeneralForm v-model="user" />
                         </el-tab-pane>
-                        <el-tab-pane label="Additional Info" name="additional">
+                        <el-tab-pane label="Personal Info" name="personal">
                             <AdditionalForm v-model="user" />
                         </el-tab-pane>
                     </el-tabs>
@@ -53,45 +53,39 @@ import { ElNotification } from 'element-plus';
 const showModal = ref(false)
 const activeTab = ref('general')
 const user = reactive({
-    avatar_url: '',
-    blacklist_status: {
-        is_blacklisted: false,
-        reason: ''
-    },
-    email: '',
-    role: 'customer',
-    status: 'active',
-    payment_methods: [],
-    personal_info: {
-        first_name: '',
-        last_name: '',
-        phone: '',
-        birthdate: ''
-    },
-    license_info: {
-        number: '',
-        issued_date: '',
-        expiry_date: '',
-        country: ''
-    },
-    preferences: {},
-    preferred_locations: [],
-    special_requests: [],
-    profile: {
-        bio: '',
-        language: '',
-        timezone: ''
-    }
+    email: "",
+    password: "",
+    role: "",
+    first_name: "",
+    last_name: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    postal_code: "",
+    date_of_birth: "",
+    gender: "",
+    nationality: "",
+    id_type: "",
+    id_number: "",
+    license_number: "",
+    license_country: "",
+    license_state: "",
+    license_class: "",
+    license_expiry: ""
 })
 const userLogged = JSON.parse(localStorage.getItem('auth'))
 
 const saveNewUser = async () => {
     console.log(user);
-    console.log(userLogged.token);
-    
-    
     await saveUser(user, userLogged.token).then((response) => {
-        console.log(response)
+        ElNotification({
+            title: 'Success',
+            message: 'User created successfully',
+            type: 'success'
+        })
+        closeModal()
     }).catch((error) => {
         console.log(error)
         ElNotification({
