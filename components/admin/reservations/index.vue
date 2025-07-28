@@ -12,6 +12,22 @@
         </div>
         <el-table :data="reservations" style="width: 100%; min-height: 400px;" :border="true"
             :highlight-current-row="true">
+            <el-table-column prop="pickup_date" label="Pickup Date">
+                <template #default="scope">
+                    <span>{{ formatDate(scope.row.pickup_date) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="return_date" label="Return Date">
+                <template #default="scope">
+                    <span>{{ formatDate(scope.row.return_date) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="payment_info.type" label="Payment Type">
+                <template #default="scope">
+                    <span>{{ scope.row.payment_info.type }}</span>
+                </template>
+            </el-table-column>
+
             <template #empty>
                 <div class="flex flex-col items-center justify-center h-40">
                     <span>No reservations found</span>
@@ -19,6 +35,10 @@
             </template>
 
         </el-table>
+           <div class="flex justify-end mt-6">
+            <el-pagination background layout="prev, pager, next" :total="totalReservations" :page-size="itemsPerPage"
+                v-model:current-page="currentPage" @current-change="handlePageChange" />
+        </div>
     </div>
 </template>
 <script setup>
@@ -39,10 +59,22 @@ onMounted(() => {
 const getReservationsData = async () => {
     await getReservations(currentPage.value, itemsPerPage.value, user.token).then((response) => {
         reservations.value = response
+        totalReservations.value = reservations.value.length-1
     }).catch((error) => {
         console.log(error)
     })
 
+}
+
+const formatDate = (date) => {
+    const dateObject = new Date(date);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObject.toLocaleDateString('en-US', options);
+}
+
+const handlePageChange = async (newPage) => {
+    currentPage.value = newPage
+    await getReservationsData()
 }
 
 

@@ -11,10 +11,6 @@ export const getVehicleById = async (id) => {
 }
 
 export const updateVehicleById = async (id, data, token) => {
-    console.log(id);
-    console.log(data);
-    console.log(token);
-    
     if (!token) {
         throw new Error('No authentication token found');
     }
@@ -36,4 +32,9 @@ export const updateVehicleById = async (id, data, token) => {
         throw error;
     }
 
+}
+
+export const searchAvailablesVehicles = async (data ) => {
+    const value = await axios.post(`/api/v1/vehicles/availability`, data);
+    return value;
 }

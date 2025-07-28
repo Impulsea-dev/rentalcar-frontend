@@ -103,7 +103,8 @@ const vehicle = reactive({
     luggage_capacity: 0,
     fuel_type: '',
     transmission: '',
-    images: []
+    images: [],
+    plate:''
 })
 
 

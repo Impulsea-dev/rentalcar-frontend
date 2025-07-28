@@ -94,6 +94,7 @@ const handleLogin = async () => {
     auth = response.data
     localStorage.setItem('auth', JSON.stringify(auth))
     if (auth.user.role === 'admin') navigateTo('/admin');
+    else if (auth.user.role === 'superadmin') navigateTo('/superadmin');
     else if (auth.user.role === 'staff') navigateTo('/staff');
     else if (auth.user.role === 'customer') navigateTo('/customer');
   }).catch(error => {

@@ -8,7 +8,7 @@
           <IconLocation class="size-4 text-gray-400" />
         </div>
         <ClientOnly>
-          <el-autocomplete v-model="search" :fetch-suggestions="querySearch" placeholder="Search a Location"
+          <el-autocomplete v-model="search" :fetch-suggestions="fetchLocations" placeholder="Search a Location"
             :popper-append-to-body="false" :teleport="false" @select="handleSelect"
             :class="{ 'has-error': errorSearch }" />
         </ClientOnly>
@@ -36,17 +36,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-// import IconLocation from '@/components/icons/IconLocation.vue'
+import { getLocations } from '@/composables/locations'
 
 const router = useRouter()
-const dates = ref<any>(null)
-const search = ref<string>('')
-const locations = [
-  { value: 'Airport Plaza, George Town' },
-]
+const dates = ref(null)
+const search = ref('')
+const locationId = ref('')
 const errorSearch = ref(false)
 const errorDates = ref(false)
 
@@ -56,13 +54,18 @@ watch(dates, (newVal) => {
   }
 })
 
-const querySearch = (queryString: string, cb: (results: any[]) => void) => {
-  const results = locations.filter(loc => loc.value.toLowerCase().includes(queryString.toLowerCase()))
-  cb(results)
+const fetchLocations = async (query, cb) => {
+    await getLocations(1, 10, 'main_office').then((response) => {
+        const results = response.data.map(item => ({ value: item.name, id: item.id }))
+        cb(results)
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
-const handleSelect = (item: any) => {
+const handleSelect = (item) => {
   search.value = item.value
+  locationId.value = item.id
   errorSearch.value = false
 }
 
@@ -70,8 +73,7 @@ const handleFind = () => {
   errorSearch.value = !search.value
   errorDates.value = !dates.value || dates.value.length !== 2
   if (!errorSearch.value && !errorDates.value) {
-    // navigate with query params
-    router.push({ path: '/view_our_cars/1', query: { location: search.value, start: dates.value[0], end: dates.value[1] } })
+    router.push({ path: 'search_results', query: { location: locationId.value, start: dates.value[0], end: dates.value[1] } })
   }
 }
 </script>

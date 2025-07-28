@@ -255,3 +255,12 @@ export const roles = [{
     label: 'Customer',
     value: 'customer'
 }]
+
+export const sortVehicles = [{
+    label: 'Year',
+    value: 'year'
+}, {
+    label: 'Model',
+    value: 'model'
+},
+]

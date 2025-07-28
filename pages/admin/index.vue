@@ -12,11 +12,18 @@
           <AdminVehicleForm />
         </el-tab-pane> -->
       <el-tab-pane label="Promotions" name="promotions">
-        <AdminPromotions />
+        <Promotions />
       </el-tab-pane>
       <el-tab-pane label="Users" name="users">
         <Users />
       </el-tab-pane>
+      <el-tab-pane label="Locations" name="locations">
+        <Locations />
+      </el-tab-pane>
+      <!-- <el-tab-pane label="Companies" name="companies">
+        <Companies/>
+      </el-tab-pane> -->
+
     </el-tabs>
   </section>
 </template>
@@ -29,6 +36,9 @@ definePageMeta({
 import { ref } from 'vue'
 import Reservations from '@/components/admin/reservations/index.vue'
 import Users from '@/components/admin/users/index.vue'
+import Locations from '@/components/admin/locations/index.vue'
+import Promotions from '@/components/admin/promotions/index.vue'
+import Companies from '@/components/superadmin/companies/index.vue'
 
 const activeTab = ref('vehicles')
 </script>

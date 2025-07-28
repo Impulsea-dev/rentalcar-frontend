@@ -10,6 +10,10 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo('/admin');
   }
 
+  if (role === 'superadmin' && !to.path.startsWith('/superadmin')) {
+    return navigateTo('/superadmin');
+  }
+
   if (role === 'customer' && !to.path.startsWith('/customer')) {
     return navigateTo('/customer');
   }
@@ -18,7 +22,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo('/staff');
   }
 
-  if (!['admin', 'customer', 'staff'].includes(role)) {
+  if (!['admin', 'customer', 'staff', 'superadmin'].includes(role)) {
     return navigateTo('/unauthorized');
   }
 });

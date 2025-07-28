@@ -6,7 +6,7 @@
                 <Plus />
             </el-icon>
             New
-            Reservation</button>
+            Location</button>
 
         <Transition name="modal-fade-slide">
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
@@ -18,23 +18,17 @@
                 </div>
                 <div class="p-4 flex flex-col flex-grow overflow-y-auto">
                     <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
-                        <el-tab-pane label="General Info" name="general">
-                            <ReservationCustomer v-model="reservation" />
-                        </el-tab-pane>
-                        <el-tab-pane label="Payment" name="payment">
-                            <ReservationPaymentInfo v-model="reservation" />
-                        </el-tab-pane>
-                        <el-tab-pane label="Preferences" name="preferences">
-                            <ReservationPreferences v-model="reservation" />
+                        <el-tab-pane label="Location Info" name="info">
+                            <LocationForm v-model="location" />
                         </el-tab-pane>
                     </el-tabs>
                     <div class="flex justify-end pt-4">
-                        <button @click="saveReservation"
+                        <button @click="saveNewLocation"
                             class="flex justify-center items-center rounded-md px-4 py-2 text-sm bg-economy text-white transition-all duration-300 hover:opacity-60 gap-x-1">
-                            <el-icon v-if="isSaving" class="animate-spin" size="16">
+                             <el-icon v-if="isSaving" class="animate-spin" size="16">
                                 <Loading />
                             </el-icon>
-                            <el-icon v-else size="16">      
+                            <el-icon v-else size="16">
                                 <Plus />
                             </el-icon>
                             Save
@@ -51,62 +45,42 @@
     </div>
 </template>
 <script setup>
-import ReservationCustomer from './ReservationCustomer.vue';
-import ReservationPaymentInfo from './ReservationPaymentInfo.vue';
-import ReservationPreferences from './ReservationPreferences.vue';
 import { Plus, CloseBold, Close, Loading } from '@element-plus/icons-vue'
+import LocationForm from './LocationForm.vue';
 import { ElNotification } from 'element-plus';
-import { save } from '@/composables/reservations'
+import { saveLocation } from '@/composables/locations'
 const showModal = ref(false)
-const activeTab = ref('general')
+const activeTab = ref('info')
 const isSaving = ref(false)
-const reservation = reactive({
-    customer_id: '',
-    vehicle_id: '',
-    pickup_date: '',
-    return_date: '',
-    pickup_location_id: '',
-    return_location_id: '',
-    daily_rate: {
-        amount: 0,
-        value: 0
-    },
-    deposit: {
-        amount: 0,
-        value: 0
-    },
-    payment_info: {
-        type: "credit_card",
-        provider: "visa",
-        last_four: "",
-        expiry_month: 12,
-        expiry_year: 2025,
-        is_default: true,
-        cardholder_name: ""
-    },
-    preferences: {
-        additional_drivers: 1,
-        child_seats: 2,
-        gps: true,
-        insurance: false,
-        special_requests: [
-        ]
+const location = reactive({
+    name: '',
+    address: '',
+    type: '',
+    location: {
+        city: '',
+        state: '',
+        country: '',
+        latitude: 0,
+        longitude: 0,
+        postal_code: '',
+        street: ''
     }
+
 })
 
 const user = JSON.parse(localStorage.getItem('auth'))
 
-const saveReservation = async() => {
+const saveNewLocation = async () => {
+    console.log(location);
     isSaving.value = true
-    console.log(reservation);
-    await save(reservation, user.token).then((response) => {
+    await saveLocation(location, user.token).then((response) => {
+        console.log(response)
         ElNotification({
             title: 'Success',
-            message: 'Reservation saved successfully',
+            message: 'Location saved successfully',
             type: 'success'
         })
         closeModal()
-
     }).catch((error) => {
         console.log(error)
         ElNotification({

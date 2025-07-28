@@ -3,6 +3,9 @@
         <!-- Search and New Vehicle -->
         <div class="flex items-center justify-end mb-6 gap-4">
             <NewVehicle />
+            <el-select v-model="selectedSort" placeholder="Select sort" size="large" class="search-input">
+                <el-option v-for="sort in sortVehicles" :key="sort.label" :label="sort.label" :value="sort.value" />
+            </el-select>
             <el-input v-model="search" placeholder="Search by brand or model" clearable class="search-input"
                 size="large">
                 <template #prefix>
@@ -63,6 +66,7 @@ import { MoreFilled, Search } from '@element-plus/icons-vue'
 import NewVehicle from './vehicles/New.vue'
 import EditVehicle from './EditVehicle.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { sortVehicles } from '@/utils/data'
 
 const vehicles = ref([])
 const search = ref('')
@@ -71,6 +75,7 @@ const itemsPerPage = ref(20)
 const totalCars = ref(0)
 const editModalVisible = ref(false)
 const vehicleToEdit = reactive({})
+const selectedSort = ref('')
 
 onMounted(async () => {
     await fetchVehicles()
@@ -81,8 +86,13 @@ watch(search, (newVal) => {
     fetchVehicles()
 })
 
+watch(selectedSort, (newVal) => {
+    currentPage.value = 1
+    fetchVehicles()
+})
+
 const fetchVehicles = async () => {
-    await getVehicles(currentPage.value, itemsPerPage.value, '', search.value, '', '').then((response) => {
+    await getVehicles(currentPage.value, itemsPerPage.value, selectedSort.value, '', search.value, '', '').then((response) => {
         vehicles.value = response.data.items
         itemsPerPage.value = response.data.page_size
         totalCars.value = response.data.total

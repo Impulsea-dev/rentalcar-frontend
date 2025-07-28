@@ -8,7 +8,7 @@
         </el-input-number>
     </el-form-item>
 
-    <el-form-item label="Weekly Rate" v-if="modelValue.weekly_rate">
+    <el-form-item label="Weekly Rate">
       <el-input-number v-model="modelValue.weekly_rate.value" :min="0" :step="1" >
           <template #prefix>
         <span>$</span>
@@ -16,7 +16,7 @@
       </el-input-number>
     </el-form-item>
 
-    <el-form-item label="Monthly Rate" v-if="modelValue.monthly_rate">
+    <el-form-item label="Monthly Rate">
       <el-input-number v-model="modelValue.monthly_rate.value" :min="0" :step="1" >
           <template #prefix>
         <span>$</span>

@@ -9,7 +9,8 @@
                     </el-icon>
                 </div>
                 <div class="p-4 flex flex-col flex-grow overflow-hidden">
-                    <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
+                    <el-tabs v-model="activeTab" class="flex-grow overflow-auto"
+                        v-if="visible && Object.keys(localVehicle).length > 0">
                         <el-tab-pane label="General" name="general">
                             <VehicleGeneralForm v-model="localVehicle" />
                         </el-tab-pane>
@@ -51,7 +52,7 @@ import VehicleGeneralForm from '@/components/admin/vehicles/GeneralForm.vue'
 import VehicleFeaturesForm from '@/components/admin/vehicles/FeaturesForm.vue'
 import VehiclePricingForm from '@/components/admin/vehicles/PricingForm.vue'
 import { Loading, Edit, CloseBold } from '@element-plus/icons-vue'
-import { updateVehicleById } from "@/composables/vehicles";
+import { getVehicleById, updateVehicleById } from "@/composables/vehicles";
 
 const props = defineProps({
     vehicle: Object,
@@ -62,12 +63,13 @@ const userLogged = JSON.parse(localStorage.getItem('auth'))
 const showModal = ref(false)
 const emit = defineEmits(['close'])
 const localVehicle = reactive({})
+const localVehicleSnapshot = ref({})
 const isUpdating = ref(false)
 
 watch(() => props.visible, (val) => {
     if (val && props.vehicle) {
+        getVehicleByIdData()
         openModal()
-        Object.assign(localVehicle, props.vehicle)
     }
 })
 
@@ -86,12 +88,13 @@ const activeTab = ref('general')
 
 const saveChanges = async () => {
     isUpdating.value = true
-    await updateVehicleById(localVehicle.id, localVehicle, userLogged.token).then((response) => {
-        console.log(response)
+    const modified = getModifiedFields(toRaw(localVehicleSnapshot.value), toRaw(localVehicle))
+    await updateVehicleById(localVehicle.id, modified, userLogged.token).then((response) => {
         ElNotification({
             title: 'Success',
             message: 'Vehicle updated successfully',
-            type: 'success'
+            type: 'success',
+            position: 'bottom-right'
         })
         closeModal()
     }).catch((error) => {
@@ -99,9 +102,37 @@ const saveChanges = async () => {
         ElNotification({
             title: 'Error',
             message: error.response.data.error,
-            type: 'error'
+            type: 'error',
+            position: 'bottom-right'
         })
+    }).finally(() => {
+        isUpdating.value = false
     })
+}
+
+const getVehicleByIdData = async () => {
+    await getVehicleById(props.vehicle.id).then((response) => {
+        if (!response.data.weekly_rate) {
+            response.data.weekly_rate = { value: 0 };
+        }
+        if (!response.data.monthly_rate) {
+            response.data.monthly_rate = { value: 0 };
+        }
+        Object.assign(localVehicle, response.data)
+        localVehicleSnapshot.value = structuredClone(response.data)
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+const getModifiedFields = (original, updated) => {
+    const changed = {}
+    for (const key in updated) {
+        if (JSON.stringify(original[key]) !== JSON.stringify(updated[key])) {
+            changed[key] = updated[key]
+        }
+    }
+    return changed
 }
 </script>
 <style scoped>
