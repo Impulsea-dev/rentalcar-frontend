@@ -41,7 +41,7 @@
 <script setup>
 import ReservationFormEdit from './ReservationFormEdit.vue';
 import { CloseBold, Loading, Edit } from '@element-plus/icons-vue'
-import { getReservationById } from "@/composables/reservations";
+import { getReservationById,updateReservationById } from "@/composables/reservations";
 // import LocationForm from './LocationForm.vue';
 const props = defineProps({
     reservation: Object,
@@ -80,26 +80,27 @@ const getReservationByIdData = async () => {
     })
 }
 
-const saveChanges = () => {
+const saveChanges = async() => {
     isUpdating.value = true
-    // await updateLocationById(localLocation.id, localLocation, user.token).then((response) => {
-    //     ElNotification({
-    //         title: 'Success',
-    //         message: 'Location updated successfully',
-    //         type: 'success',
-    //         position: 'bottom-right'
-    //     })
-    //     closeModal()
-    // }).catch((error) => {
-    //     console.log(error)
-    //     ElNotification({
-    //         title: 'Error',
-    //         message: error.response.data.error,
-    //         type: 'error',
-    //         position: 'bottom-right'
-    //     })
-    // }).finally(() => {
-    //     isUpdating.value = false
-    // })
+    console.log(localReservation);  
+    await updateReservationById(localReservation.id, localReservation, user.token).then((response) => {
+        ElNotification({
+            title: 'Success',
+            message: 'Reservation updated successfully',
+            type: 'success',
+            position: 'bottom-right'
+        })
+        closeModal()
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error',
+            position: 'bottom-right'
+        })
+    }).finally(() => {
+        isUpdating.value = false
+    })
 }
 </script>

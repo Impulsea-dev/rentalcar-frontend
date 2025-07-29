@@ -26,3 +26,17 @@ export async function getCurrentCountry() {
         return null;
     }
 }
+
+export const getTotalDays = (start, end) => {
+  if (!start || !end) return 0
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+  startDate.setHours(0, 0, 0, 0)
+  endDate.setHours(0, 0, 0, 0)
+
+  const msPerDay = 1000 * 60 * 60 * 24
+  const diff = (endDate - startDate) / msPerDay
+
+  return diff + 1
+}
+

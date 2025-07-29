@@ -27,6 +27,10 @@
                                 <span class="text-gray-400">Logged in</span>
                             </div>
                         </el-dropdown-item>
+                            <el-dropdown-item divided @click="goToDash"  class="text-white hover:bg-[#3b4753]">
+                            <el-icon><Menu/></el-icon>
+                            <span class="ml-2">Dashboard</span>
+                        </el-dropdown-item>
 
                         <el-dropdown-item divided @click="logout" class="text-white hover:bg-[#3b4753]">
                             <el-icon><switch-button /></el-icon>
@@ -43,12 +47,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ArrowDown, SwitchButton } from '@element-plus/icons-vue'
+import { ArrowDown, SwitchButton, Menu } from '@element-plus/icons-vue'
 const router = useRouter()
 const user = JSON.parse(localStorage.getItem('auth'))
 const name = user.user.profile.first_name + ' ' + user.user.profile.last_name
 const logout = () => {
     localStorage.removeItem('auth')
     router.push('/login')
-}                        
+}  
+
+const goToDash = () => {
+    router.push(`/${user.user.role}`)
+}
 </script>

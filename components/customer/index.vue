@@ -12,6 +12,23 @@
         </div>
         <el-table :data="reservations" style="width: 100%; min-height: 400px;" :border="true"
             :highlight-current-row="true">
+            <el-table-column label="Full Name">
+                <template #default="scope">
+                    <span>{{ scope.row.customer.profile.first_name }} {{ scope.row.customer.profile.last_name }}</span>
+                </template>
+            </el-table-column>
+                        <el-table-column prop="vehicle.brand_name" label="Vehicle Brand">
+                <template #default="scope">
+                    <span>{{ scope.row.vehicle.brand_name }}</span>
+                </template>
+            </el-table-column>
+                        <el-table-column label="Vehicle Info">
+                <template #default="scope">
+                    <span>
+                        {{ scope.row.vehicle.model }} - {{ scope.row.vehicle.color }} - {{ scope.row.vehicle.year }}
+                    </span>
+                </template>
+            </el-table-column>
             <el-table-column prop="pickup_date" label="Pickup Date">
                 <template #default="scope">
                     <span>{{ formatDate(scope.row.pickup_date) }}</span>
@@ -35,7 +52,7 @@
             </template>
 
         </el-table>
-           <div class="flex justify-end mt-6">
+        <div class="flex justify-end mt-6">
             <el-pagination background layout="prev, pager, next" :total="totalReservations" :page-size="itemsPerPage"
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
@@ -51,23 +68,21 @@ const user = JSON.parse(localStorage.getItem('auth'))
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 const totalReservations = ref(0)
-onMounted(async() => {
-   await getReservationsData()
+onMounted(async () => {
+    await getReservationsData()
 
 })
 
 const getReservationsData = async () => {
     await getReservations(currentPage.value, itemsPerPage.value, user.token, search.value).then((response) => {
-        console.log(response);
-        
         response.forEach(reservation => {
             if (reservation.customer_id === user.user.id) {
                 reservations.value.push(reservation)
             }
         })
         console.log(reservations.value);
-        
-        totalReservations.value = reservations.value.length-1
+
+        totalReservations.value = reservations.value.length - 1
     }).catch((error) => {
         console.log(error)
     })

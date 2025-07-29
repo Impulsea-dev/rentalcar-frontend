@@ -17,6 +17,9 @@
 </template>
 
 <script setup>
+definePageMeta({
+    middleware: ['layout-auth-client'],
+})
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { searchAvailablesVehicles } from '@/composables/vehicles'

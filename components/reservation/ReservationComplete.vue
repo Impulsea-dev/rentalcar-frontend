@@ -79,7 +79,6 @@
       <!-- Sección derecha: resumen -->
       <div class="bg-white p-6 rounded-xl shadow-lg sticky top-6 h-fit">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Reservation Summary</h2>
-
         <div class="space-y-4 text-sm text-gray-700">
           <div>
             <p class="font-semibold">Pick-Up Date</p>
@@ -92,10 +91,14 @@
             <p>{{ formatDate(reservation.return_date) }}</p>
             <p>Airport Plaza, George Town</p>
           </div>
+          <div>
+            <p class="font-semibold">Total Days</p>
+            <p>{{ getTotalDays(reservation.pickup_date, reservation.return_date) }} days</p>
+          </div>
           <div class="border-t pt-4">
             <div class="flex justify-between font-semibold text-base">
               <span>Total:</span>
-              <span>${{ vehicle.daily_rate.value.toFixed(2) }}</span>
+              <span>${{getTotalPrice(reservation, vehicle)}}</span>
             </div>
           </div>
         </div>
@@ -109,15 +112,13 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getVehicleById } from '@/composables/vehicles'
+import { getTotalDays } from '@/utils/index'
+
 const route = useRoute()
 const vehicle = ref(null)
-const reservation = ref({})
+const props = defineProps ({ reservation: Object })
 
 onMounted(async() => {
-    const data = localStorage.getItem('reservationData')
-    if (data) {
-        reservation.value = JSON.parse(data)
-    }
    await getVehicleData()
 })
 
@@ -136,6 +137,12 @@ const getVehicleData = async () => {
     }).catch((error) => {
         console.log(error)
     })
+}
+
+const getTotalPrice = (reservation, vehicle) => {
+    const rate = vehicle.daily_rate?.value || 0
+    const days = getTotalDays(reservation.pickup_date, reservation.return_date)
+    return (rate * days).toFixed(2)
 }
 
 </script>

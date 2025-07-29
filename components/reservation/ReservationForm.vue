@@ -39,7 +39,7 @@
             </el-form-item>
 
             <el-form-item label="Country" prop="country">
-                <el-select v-model="formData.country" placeholder="Select your country" size="large">
+                <el-select v-model="formData.country" placeholder="Select your country" filterable size="large">
                     <el-option v-for="country in countries" :key="country" :label="country" :value="country" />
                 </el-select>
             </el-form-item>

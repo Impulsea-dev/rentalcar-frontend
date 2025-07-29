@@ -44,6 +44,11 @@ useSeoMeta({
     ogImage: 'https://example.com/image.png',
     twitterCard: 'summary_large_image',
 })
+
+definePageMeta({
+    middleware: ['layout-auth-client'],
+})
+
 </script>
 <style>
 .cars-img {

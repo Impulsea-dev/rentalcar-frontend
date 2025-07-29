@@ -51,13 +51,14 @@
 
         <!-- Pagination -->
         <div class="flex justify-between items-center gap-4 mt-6">
-            <div class="flex justify-center items-center gap-1 text-sm">Total Vehicles: <span class="bg-green-400 rounded-full px-1 py-0.5 text-white">{{ totalCars }}</span></div>
+            <div class="flex justify-center items-center gap-1 text-sm">Total Vehicles: <span
+                    class="bg-green-400 rounded-full px-1 py-0.5 text-white">{{ totalCars }}</span></div>
             <el-pagination background layout="prev, pager, next" :total="totalCars" :page-size="itemsPerPage"
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
 
-        <EditVehicle v-show="editModalVisible" :vehicle="vehicleToEdit" :visible="editModalVisible"
-            @close="editModalVisible = false" />
+        <EditVehicle v-if="editModalVisible" :key="vehicleToEdit?.id" :vehicle="vehicleToEdit"
+            :visible="editModalVisible" @close="editModalVisible = false" />
     </div>
 </template>
 <script setup>

@@ -66,13 +66,6 @@ const localVehicle = reactive({})
 const localVehicleSnapshot = ref({})
 const isUpdating = ref(false)
 
-watch(() => props.visible, (val) => {
-    if (val && props.vehicle) {
-        getVehicleByIdData()
-        openModal()
-    }
-})
-
 const openModal = () => {
     document.body.style.overflow = 'hidden';
     showModal.value = true;
@@ -166,6 +159,19 @@ const getModifiedFields = (original, updated) => {
     }
     return changed
 }
+
+watch(
+  () => props.visible,
+  (val) => {
+    if (val && props.vehicle) {
+      getVehicleByIdData()
+      openModal()
+    } else {
+      closeModal()
+    }
+  },
+  { immediate: true }
+)
 
 </script>
 <style scoped>

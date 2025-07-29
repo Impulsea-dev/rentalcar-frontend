@@ -4,7 +4,8 @@
             <!-- Imagen + info básica -->
             <div>
                 <div class="relative">
-                     <img :src="vehicle.thumbnail" :alt="vehicle.model" class="w-full h-auto rounded-xl shadow-md mb-6 object-cover" v-if="vehicle.thumbnail" />
+                    <img :src="vehicle.thumbnail" :alt="vehicle.model"
+                        class="w-full h-auto rounded-xl shadow-md mb-6 object-cover" v-if="vehicle.thumbnail" />
                     <img src="https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg"
                         :alt="vehicle.model" class="w-full h-auto rounded-xl shadow-md mb-6" v-else />
                     <!-- <span :class="[
@@ -129,12 +130,14 @@
         <!-- Autos relacionados -->
         <div class="mt-16">
             <h3 class="text-xl font-semibold text-gray-800 mb-6">Related Cars</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" v-if="relatedVehicles.length > 0">
                 <div v-for="related in relatedVehicles" :key="related.id"
                     class="border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden hover:cursor-pointer">
-                    <img :src="related.thumbnail?related.thumbnail:'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg'" :alt="related.name" class="w-full h-48 object-cover" />
+                    <img :src="related.thumbnail ? related.thumbnail : 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg'"
+                        :alt="related.name" class="w-full h-48 object-cover" />
                     <div class="p-4">
-                        <h4 class="text-lg font-semibold text-gray-800">{{ related.brand_name }} {{ related.model }} {{ related.year }}</h4>
+                        <h4 class="text-lg font-semibold text-gray-800">{{ related.brand_name }} {{ related.model }} {{
+                            related.year }}</h4>
                         <p class="text-gray-600 mb-2">${{ related.daily_rate.value.toFixed(2) }} / day</p>
                         <!-- <div class="flex flex-wrap gap-1 mb-2">
                             <el-tag type="info" size="small" v-for="t in related.type" :key="t">{{ t }}</el-tag>
@@ -148,12 +151,25 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="flex flex-col items-center justify-center py-10 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-gray-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.75 9.75L14.25 14.25M14.25 9.75L9.75 14.25M21 12A9 9 0 1 1 3 12a9 9 0 0 1 18 0Z" />
+                </svg>
+                <p class="text-lg font-semibold mb-1">No related vehicles found</p>
+                <p class="text-sm">Try browsing other categories or adjusting your filters.</p>
+            </div>
+
         </div>
     </div>
 </template>
 
 
 <script setup>
+definePageMeta({
+    middleware: ['layout-auth-client'],
+})
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'

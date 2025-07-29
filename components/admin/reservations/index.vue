@@ -41,6 +41,12 @@
                     <span>{{ formatDate(scope.row.return_date) }}</span>
                 </template>
             </el-table-column>
+            <!-- <el-table-column label="Total Days">
+                <template #default="scope">
+                    <span>{{ getTotalDays(scope.row.pickup_date, scope.row.return_date) }}</span>
+                </template> 
+
+            </el-table-column> -->
             <el-table-column prop="payment_info.type" label="Payment Type">
                 <template #default="scope">
                     <span>{{ scope.row.payment_info.type }}</span>
@@ -56,6 +62,9 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
+                                <el-dropdown-item @click="viewReservation(scope.row)">
+                                    View Details
+                                </el-dropdown-item>
                                 <el-dropdown-item @click="editReservation(scope.row)">Edit
                                     Reservation</el-dropdown-item>
                                 <!-- <el-dropdown-item divided>Delete Reservation</el-dropdown-item> -->
@@ -78,13 +87,16 @@
         </div>
         <EditReservation v-show="editModalVisible" :reservation="reservationToEdit" :visible="editModalVisible"
             @close="editModalVisible = false" />
+        <ReservationDetails v-model="showReservationModal" :reservation="selectedReservation" />
     </div>
 </template>
 <script setup>
 import NewReservation from './NewReservation.vue';
 import EditReservation from './EditReservation.vue';
+import ReservationDetails from './ReservationDetails.vue';
 import { Search, MoreFilled } from '@element-plus/icons-vue'
 import { getReservations } from '@/composables/reservations'
+import { getTotalDays } from '@/utils/index'
 const reservations = ref([])
 const search = ref('')
 const user = JSON.parse(localStorage.getItem('auth'))
@@ -93,6 +105,9 @@ const itemsPerPage = ref(20)
 const totalReservations = ref(0)
 const editModalVisible = ref(false)
 const reservationToEdit = reactive({})
+
+const showReservationModal = ref(false)
+const selectedReservation = ref(null)
 onMounted(() => {
     getReservationsData()
 
@@ -124,6 +139,12 @@ const handlePageChange = async (newPage) => {
 const editReservation = (reservation) => {
     Object.assign(reservationToEdit, reservation)
     editModalVisible.value = true
+}
+
+
+const viewReservation = (reservation) => {
+    selectedReservation.value = reservation
+    showReservationModal.value = true
 }
 
 
