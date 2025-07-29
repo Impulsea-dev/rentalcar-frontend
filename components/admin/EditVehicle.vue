@@ -52,7 +52,7 @@ import VehicleGeneralForm from '@/components/admin/vehicles/GeneralForm.vue'
 import VehicleFeaturesForm from '@/components/admin/vehicles/FeaturesForm.vue'
 import VehiclePricingForm from '@/components/admin/vehicles/PricingForm.vue'
 import { Loading, Edit, CloseBold } from '@element-plus/icons-vue'
-import { getVehicleById, updateVehicleById } from "@/composables/vehicles";
+import { getVehicleById, updateVehicleById, addImagesToVehicle, addThumbnailToVehicle } from "@/composables/vehicles";
 
 const props = defineProps({
     vehicle: Object,
@@ -89,25 +89,52 @@ const activeTab = ref('general')
 const saveChanges = async () => {
     isUpdating.value = true
     const modified = getModifiedFields(toRaw(localVehicleSnapshot.value), toRaw(localVehicle))
-    await updateVehicleById(localVehicle.id, modified, userLogged.token).then((response) => {
+    const modifiedImages = modified.images
+        ? modified.images.filter(img => img.image.startsWith('data:image'))
+        : null
+    const modifiedThumbnail = modified.thumbnail
+    delete modified.images
+    delete modified.thumbnail
+
+    // console.log(modifiedImages)
+    console.log(modifiedThumbnail)
+    let imagesToSend = {
+        images: modifiedImages
+    }
+    
+    
+    try {
+        if (modifiedImages && modifiedImages.length) {
+            await addImagesToVehicle(localVehicle.id, imagesToSend, userLogged.token)
+        }
+        if (modifiedThumbnail) {
+            await addThumbnailToVehicle(localVehicle.id, modifiedThumbnail, userLogged.token)
+        }
+
+        if (Object.keys(modified).length > 0) {
+            await updateVehicleById(localVehicle.id, modified, userLogged.token)
+        }
+
         ElNotification({
             title: 'Success',
             message: 'Vehicle updated successfully',
             type: 'success',
             position: 'bottom-right'
         })
+
         closeModal()
-    }).catch((error) => {
-        console.log(error)
+    } catch (error) {
+        console.error(error)
         ElNotification({
             title: 'Error',
-            message: error.response.data.error,
+            message: error?.response?.data?.error || 'Something went wrong',
             type: 'error',
             position: 'bottom-right'
         })
-    }).finally(() => {
+    } finally {
         isUpdating.value = false
-    })
+    }
+
 }
 
 const getVehicleByIdData = async () => {
@@ -118,8 +145,11 @@ const getVehicleByIdData = async () => {
         if (!response.data.monthly_rate) {
             response.data.monthly_rate = { value: 0 };
         }
-        Object.assign(localVehicle, response.data)
+        console.log(response.data);
+
         localVehicleSnapshot.value = structuredClone(response.data)
+        Object.assign(localVehicle, response.data)
+
     }).catch((error) => {
         console.log(error)
     })
@@ -128,12 +158,15 @@ const getVehicleByIdData = async () => {
 const getModifiedFields = (original, updated) => {
     const changed = {}
     for (const key in updated) {
-        if (JSON.stringify(original[key]) !== JSON.stringify(updated[key])) {
-            changed[key] = updated[key]
+        const originalValue = original[key]
+        const updatedValue = updated[key]
+        if (JSON.stringify(originalValue) !== JSON.stringify(updatedValue)) {
+            changed[key] = updatedValue
         }
     }
     return changed
 }
+
 </script>
 <style scoped>
 @keyframes modal-fade-slide {

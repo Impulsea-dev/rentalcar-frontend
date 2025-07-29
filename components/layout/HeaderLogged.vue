@@ -10,7 +10,7 @@
             <el-dropdown trigger="click">
                 <div
                     class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-[#444f5a] cursor-pointer transition-all">
-                    <el-avatar :size="32" src="https://i.pravatar.cc/150?img=3" />
+                 <el-avatar :size="32" src="https://www.gravatar.com/avatar/?d=mp" />
                     <div class="flex items-center gap-1 text-white">
                         <span class="text-sm font-semibold">{{ name }}</span>
                         <el-icon class="text-gray-300">

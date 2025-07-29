@@ -83,7 +83,8 @@ const saveNewUser = async () => {
         ElNotification({
             title: 'Success',
             message: 'User created successfully',
-            type: 'success'
+            type: 'success',
+            position: 'bottom-right'
         })
         closeModal()
     }).catch((error) => {
@@ -91,7 +92,8 @@ const saveNewUser = async () => {
         ElNotification({
             title: 'Error',
             message: error.response.data.error,
-            type: 'error'
+            type: 'error',
+            position: 'bottom-right'
         })
     })
 }

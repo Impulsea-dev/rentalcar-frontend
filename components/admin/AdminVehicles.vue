@@ -50,7 +50,8 @@
         </el-table>
 
         <!-- Pagination -->
-        <div class="flex justify-end mt-6">
+        <div class="flex justify-between items-center gap-4 mt-6">
+            <div class="flex justify-center items-center gap-1 text-sm">Total Vehicles: <span class="bg-green-400 rounded-full px-1 py-0.5 text-white">{{ totalCars }}</span></div>
             <el-pagination background layout="prev, pager, next" :total="totalCars" :page-size="itemsPerPage"
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
@@ -92,7 +93,7 @@ watch(selectedSort, (newVal) => {
 })
 
 const fetchVehicles = async () => {
-    await getVehicles(currentPage.value, itemsPerPage.value, selectedSort.value, '', search.value, '', '').then((response) => {
+    await getVehicles(currentPage.value, itemsPerPage.value, selectedSort.value, search.value, '', '').then((response) => {
         vehicles.value = response.data.items
         itemsPerPage.value = response.data.page_size
         totalCars.value = response.data.total

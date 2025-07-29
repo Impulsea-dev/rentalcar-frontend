@@ -36,7 +36,7 @@
     </svg>
     <span>{{ car.category === 'commercial' ? 'Discount' : 'Economy' }}</span>
   </span> -->
-        <img src="https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg"
+        <img :src="car.thumbnail ? car.thumbnail : 'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg'"
             class="hover:scale-125 transition-transform duration-500 hover:-translate-y-8 w-auto h-60" alt="">
         <div class="flex flex-col flex-grow space-y-4 p-4">
             <span class="text-lg md:text-xl text-black font-medium tracking-wide">{{ car.model }} {{ car.year }} {{

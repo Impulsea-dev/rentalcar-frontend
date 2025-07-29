@@ -38,3 +38,55 @@ export const searchAvailablesVehicles = async (data ) => {
     const value = await axios.post(`/api/v1/vehicles/availability`, data);
     return value;
 }
+
+export const getRelatedVehicles = async (id) => {
+    const value = await axios.get(`/api/v1/vehicles/${id}/related`);
+    return value;
+}
+
+export const addImagesToVehicle = async (id, data, token) => {
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+    const url = `/api/v1/vehicles/${id}/images/batch`;
+    try {
+        const response = await axios.post(url, data, config);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            throw new Error('Authentication expired');
+        }
+        throw error;
+    }
+}
+
+export const addThumbnailToVehicle = async (id, data, token) => {
+    if (!token) {
+        throw new Error('No authentication token found');
+    }                    
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+    const url = `/api/v1/vehicles/${id}/thumbnail`;
+    try {
+        const response = await axios.post(url, data, config);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            throw new Error('Authentication expired');
+        }
+        throw error;
+    }
+}
+
+

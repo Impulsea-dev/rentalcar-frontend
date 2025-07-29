@@ -51,3 +51,32 @@ export const save = async (data, token) => {
         throw error;
     }
 }
+
+export const getReservationById = async (id, token) => {
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const url = `/api/v1/reservations/${id}`;
+    try {
+        const response = await axios.get(url, config);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            throw new Error('Authentication expired');
+        }
+        throw error;
+    }
+}
+
+export const createPublicReservation = async (data) => {
+    const value = await axios.post(`/api/v1/reservations/public`, data);
+    return value;
+}

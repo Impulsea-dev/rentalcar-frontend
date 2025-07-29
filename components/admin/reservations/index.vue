@@ -12,6 +12,25 @@
         </div>
         <el-table :data="reservations" style="width: 100%; min-height: 400px;" :border="true"
             :highlight-current-row="true">
+            <el-table-column label="Full Name">
+                <template #default="scope">
+                    <span>{{ scope.row.customer.profile.first_name }} {{ scope.row.customer.profile.last_name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="vehicle.brand_name" label="Vehicle Brand">
+                <template #default="scope">
+                    <span>{{ scope.row.vehicle.brand_name }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="Vehicle Info">
+                <template #default="scope">
+                    <span>
+                        {{ scope.row.vehicle.model }} - {{ scope.row.vehicle.color }} - {{ scope.row.vehicle.year }}
+                    </span>
+                </template>
+            </el-table-column>
+
+
             <el-table-column prop="pickup_date" label="Pickup Date">
                 <template #default="scope">
                     <span>{{ formatDate(scope.row.pickup_date) }}</span>
@@ -27,6 +46,24 @@
                     <span>{{ scope.row.payment_info.type }}</span>
                 </template>
             </el-table-column>
+            <el-table-column props="actions" label="Actions" width="100">
+                <template #default="scope">
+                    <el-dropdown trigger="click">
+                        <span class="cursor-pointer">
+                            <el-icon>
+                                <MoreFilled />
+                            </el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item @click="editReservation(scope.row)">Edit
+                                    Reservation</el-dropdown-item>
+                                <!-- <el-dropdown-item divided>Delete Reservation</el-dropdown-item> -->
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </template>
+            </el-table-column>
 
             <template #empty>
                 <div class="flex flex-col items-center justify-center h-40">
@@ -35,15 +72,18 @@
             </template>
 
         </el-table>
-           <div class="flex justify-end mt-6">
+        <div class="flex justify-end mt-6">
             <el-pagination background layout="prev, pager, next" :total="totalReservations" :page-size="itemsPerPage"
                 v-model:current-page="currentPage" @current-change="handlePageChange" />
         </div>
+        <EditReservation v-show="editModalVisible" :reservation="reservationToEdit" :visible="editModalVisible"
+            @close="editModalVisible = false" />
     </div>
 </template>
 <script setup>
 import NewReservation from './NewReservation.vue';
-import { Search } from '@element-plus/icons-vue'
+import EditReservation from './EditReservation.vue';
+import { Search, MoreFilled } from '@element-plus/icons-vue'
 import { getReservations } from '@/composables/reservations'
 const reservations = ref([])
 const search = ref('')
@@ -51,6 +91,8 @@ const user = JSON.parse(localStorage.getItem('auth'))
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 const totalReservations = ref(0)
+const editModalVisible = ref(false)
+const reservationToEdit = reactive({})
 onMounted(() => {
     getReservationsData()
 
@@ -59,7 +101,9 @@ onMounted(() => {
 const getReservationsData = async () => {
     await getReservations(currentPage.value, itemsPerPage.value, user.token).then((response) => {
         reservations.value = response
-        totalReservations.value = reservations.value.length-1
+        console.log(reservations.value);
+
+        totalReservations.value = reservations.value.length - 1
     }).catch((error) => {
         console.log(error)
     })
@@ -75,6 +119,11 @@ const formatDate = (date) => {
 const handlePageChange = async (newPage) => {
     currentPage.value = newPage
     await getReservationsData()
+}
+
+const editReservation = (reservation) => {
+    Object.assign(reservationToEdit, reservation)
+    editModalVisible.value = true
 }
 
 

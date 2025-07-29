@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 max-h-[80vh] overflow-auto">
     <el-form-item label="Class" label-position="top">
       <el-input v-model="modelValue.class" placeholder="e.g. Economy" size="large" />
     </el-form-item>
@@ -26,11 +26,19 @@
     <el-form-item label="Plate" label-position="top">
       <el-input v-model="modelValue.plate" placeholder="e.g. ABC-123" size="large" />
     </el-form-item>
-    <el-form-item label="Vehicle Images" label-position="top" class="md:col-span-2">
-      <el-upload class="upload-demo" drag multiple action="" :auto-upload="false" :on-change="handleImageChange" :on-remove="handleImageRemove"
-        :file-list="imageFileList" accept="image/*" list-type="picture-card">
+    <el-form-item label="Vehicle Images" label-position="top">
+      <el-upload class="upload-demo" drag multiple action="" :auto-upload="false" :on-change="handleImageChange"
+        :on-remove="handleImageRemove" :file-list="imageFileList" accept="image/*" list-type="picture-card">
         <i class="el-icon-upload" />
         <div class="el-upload__text">Drop files here or <em>click to upload</em></div>
+      </el-upload>
+    </el-form-item>
+    <!-- Upload Thumbnail -->
+    <el-form-item label="Thumbnail Image" label-position="top">
+      <el-upload action="" :auto-upload="false" :limit="1" :file-list="thumbnailFileList"
+        :on-change="handleThumbnailChange" :on-remove="handleThumbnailRemove" accept="image/*" list-type="picture-card">
+        <i class="el-icon-upload" />
+        <div class="el-upload__text">Upload Thumbnail</div>
       </el-upload>
     </el-form-item>
   </div>
@@ -45,6 +53,8 @@ const props = defineProps({
 })
 
 const imageFileList = ref([])
+const thumbnailFileList = ref([])
+
 
 onMounted(() => {
   if (props.modelValue.images?.length) {
@@ -54,18 +64,30 @@ onMounted(() => {
       status: 'finished'
     }))
   }
+ if (props.modelValue.thumbnail) {
+  thumbnailFileList.value = [{
+    name: 'thumbnail.jpg',
+    url: props.modelValue.thumbnail,
+    status: 'finished'
+  }]
+}
 })
 
 
 const handleImageChange = async (file, fileList) => {
   imageFileList.value = fileList
-
-  const base64List = await Promise.all(
-    fileList.map(f => toBase64(f.raw || f))
+  const imageObjects = await Promise.all(
+    fileList.map(async (f) => {
+      const image = f.raw ? await toBase64(f.raw) : f.url
+      const filename = f.raw?.name || f.name || 'image.png'
+      return { image, filename }
+    })
   )
 
-  props.modelValue.images = base64List
+  props.modelValue.images = imageObjects
 }
+
+
 
 const toBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -76,9 +98,36 @@ const toBase64 = (file) => {
   })
 }
 
-const handleImageRemove = (file, fileList) => {
-  const url = file.url
-  props.modelValue.images = props.modelValue.images.filter(img => img !== url)
+const handleImageRemove = async (file, fileList) => {
+  let base64ToRemove = file.url
+
+  if (file.raw) {
+    base64ToRemove = await toBase64(file.raw)
+  }
+
+  props.modelValue.images = props.modelValue.images.filter(img => img !== base64ToRemove)
   imageFileList.value = fileList
 }
+
+
+// Thumbnail
+const handleThumbnailChange = async (file) => {
+  const base64 = await toBase64(file.raw)
+  props.modelValue.thumbnail = {
+    image: base64,
+    filename: file.name || 'thumbnail.jpg'
+  }
+  thumbnailFileList.value = [{
+    name: file.name || 'thumbnail.jpg',
+    url: base64,
+    status: 'finished'
+  }]
+}
+
+const handleThumbnailRemove = () => {
+  props.modelValue.thumbnail = null
+  thumbnailFileList.value = []
+}
+
+
 </script>

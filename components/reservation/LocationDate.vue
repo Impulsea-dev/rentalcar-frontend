@@ -4,7 +4,7 @@
         <div class="flex flex-col gap-1 items-start">
             <div>Pick-up and Drop-off location</div>
                 <ClientOnly>
-                    <el-autocomplete v-model="search" :fetch-suggestions="querySearch" placeholder="Search a Location"
+                    <el-autocomplete v-model="search" :fetch-suggestions="fetchLocations" placeholder="Search a Location"
                         :popper-append-to-body="false" :teleport="false" @select="handleSelect"
                         :class="{ 'has-error': errorSearch }" />
                 </ClientOnly>
@@ -25,30 +25,32 @@
 </template>
 <script setup>
 import { ref, defineExpose } from 'vue'
+import { getLocations } from '@/composables/locations'
 const search = ref('')
+const locationId = ref('')
 const dates = ref([])
 const errorSearch = ref(false)
 const errorDates = ref(false)
-const locations = [
-    { value: 'Airport Plaza, George Town' },
-]
 
 const getFormData = () => ({
-  location: search.value,
-  dates: dates.value
+  pickup_location_id: locationId.value,
+  return_location_id: locationId.value,
+  pickup_date: dates.value[0],
+  return_date: dates.value[1]
 })
 
-const querySearch = (queryString, cb) => {
-    const results = queryString
-        ? locations.filter(loc =>
-            loc.value.toLowerCase().includes(queryString.toLowerCase())
-        )
-        : locations
-    cb(results)
+const fetchLocations = async (query, cb) => {
+    await getLocations(1, 10, 'main_office').then((response) => {
+        const results = response.data.map(item => ({ value: item.name, id: item.id }))
+        cb(results)
+    }).catch((error) => {
+        console.log(error)
+    })
 }
 
 const handleSelect = (item) => {
     search.value = item.value
+    locationId.value = item.id
 }
 
 const validateForm = async () => {

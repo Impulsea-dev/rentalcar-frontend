@@ -17,7 +17,7 @@
 
             </div>
             <div v-else-if="activeStep === 2">
-             <ReservationComplete />
+                <ReservationComplete />
             </div>
         </div>
 
@@ -30,7 +30,7 @@
             </button>
 
             <div class="ml-auto">
-                <button v-if="activeStep < totalSteps - 1" @click="next" class=" mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-economy text-white transition-all
+                <button v-if="activeStep < totalSteps - 1 && activeStep !== 2" @click="next" class=" mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-economy text-white transition-all
                  duration-300 hover:opacity-60">
                     Next
                     <iconRight />
@@ -38,7 +38,13 @@
 
                 <button v-else @click="completeReservation" class="mt-4 flex justify-center items-center gap-x-2 rounded-full px-6 py-3 text-base bg-economy text-white transition-all
                  duration-300 hover:opacity-60">
-                    Complete Reservation
+                    <el-icon v-if="isSavingReservation" class="animate-spin" size="16">
+                        <Loading />
+                    </el-icon>
+                    <el-icon v-else size="16">
+                        <Check />
+                    </el-icon>
+                    Complete
                 </button>
             </div>
         </div>
@@ -50,10 +56,16 @@ import { ElSteps, ElStep, ElButton } from 'element-plus'
 import ReservationForm from '@/components/reservation/ReservationForm.vue'
 import LocationDate from '@/components/reservation/LocationDate.vue'
 import ReservationComplete from '@/components/reservation/ReservationComplete.vue'
+import { createPublicReservation } from '@/composables/reservations'
+import { Loading, Check } from '@element-plus/icons-vue'
+import { useRoute, useRouter } from 'vue-router'
 const activeStep = ref(0)
 const totalSteps = 3
 const formRef = ref()
 const locationDateRef = ref()
+const isSavingReservation = ref(false)
+const route = useRoute()
+const router = useRouter()
 
 const next = async () => {
     let canContinue = true
@@ -61,9 +73,9 @@ const next = async () => {
     if (activeStep.value === 0) {
         canContinue = await formRef.value?.validateForm()
         if (canContinue) {
-            const userData = formRef.value?.getFormData()
+            const customer_info = formRef.value?.getFormData()
             const existingData = JSON.parse(localStorage.getItem('reservationData') || '{}')
-            localStorage.setItem('reservationData', JSON.stringify({ ...existingData, user: userData }))
+            localStorage.setItem('reservationData', JSON.stringify({ ...existingData, customer_info }))
         }
     }
 
@@ -72,7 +84,7 @@ const next = async () => {
         if (canContinue) {
             const locationData = locationDateRef.value?.getFormData()
             const existingData = JSON.parse(localStorage.getItem('reservationData') || '{}')
-            localStorage.setItem('reservationData', JSON.stringify({ ...existingData, location: locationData }))
+            localStorage.setItem('reservationData', JSON.stringify({ ...existingData, ...locationData }))
         }
     }
 
@@ -84,15 +96,40 @@ const next = async () => {
 }
 
 
+
 const prev = () => {
     if (activeStep.value > 0) {
         activeStep.value--
     }
 }
 
-const completeReservation = () => {
-    localStorage.removeItem('reservationData')
-    console.log('Reserva completada 🎉')
+const completeReservation = async () => {
+    let reservation = JSON.parse(localStorage.getItem('reservationData'))
+    reservation.vehicle_id = route.params.id
+    isSavingReservation.value = true
+    await createPublicReservation(reservation).then((response) => {
+        ElNotification({
+            title: 'Success',
+            message: 'Reservation created successfully',
+            type: 'success',
+            position: 'bottom-right'
+        })
+        setTimeout(() => {
+            router.go(0)
+        }, 2000)
+    }).catch((error) => {
+        console.log(error)
+        ElNotification({
+            title: 'Error',
+            message: error.response.data.error,
+            type: 'error',
+            position: 'bottom-right'
+        })
+    }).finally(() => {
+        isSavingReservation.value = false
+    })
+
+
 }
 </script>
 <style scoped>

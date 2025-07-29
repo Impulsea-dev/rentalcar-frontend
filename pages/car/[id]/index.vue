@@ -4,8 +4,9 @@
             <!-- Imagen + info básica -->
             <div>
                 <div class="relative">
+                     <img :src="vehicle.thumbnail" :alt="vehicle.model" class="w-full h-auto rounded-xl shadow-md mb-6 object-cover" v-if="vehicle.thumbnail" />
                     <img src="https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg"
-                        :alt="vehicle.model" class="w-full h-auto rounded-xl shadow-md mb-6" />
+                        :alt="vehicle.model" class="w-full h-auto rounded-xl shadow-md mb-6" v-else />
                     <!-- <span :class="[
                         'absolute top-2 right-2 flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full text-white z-10',
                         car.category === 'commercial' ? 'bg-primary' : 'bg-economy'
@@ -126,28 +127,28 @@
         </div>
 
         <!-- Autos relacionados -->
-        <!-- <div class="mt-16">
+        <div class="mt-16">
             <h3 class="text-xl font-semibold text-gray-800 mb-6">Related Cars</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="related in relatedCars" :key="related.name"
-                    class="border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
-                    <img :src="related.image" :alt="related.name" class="w-full h-48 object-cover" />
+                <div v-for="related in relatedVehicles" :key="related.id"
+                    class="border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden hover:cursor-pointer">
+                    <img :src="related.thumbnail?related.thumbnail:'https://economycarrental.com.ky/wp-content/uploads/2017/01/Economy-Rental-Car-Grand-I-10.jpg'" :alt="related.name" class="w-full h-48 object-cover" />
                     <div class="p-4">
-                        <h4 class="text-lg font-semibold text-gray-800">{{ related.name }}</h4>
-                        <p class="text-gray-600 mb-2">${{ related.price }} / day</p>
-                        <div class="flex flex-wrap gap-1 mb-2">
+                        <h4 class="text-lg font-semibold text-gray-800">{{ related.brand_name }} {{ related.model }} {{ related.year }}</h4>
+                        <p class="text-gray-600 mb-2">${{ related.daily_rate.value.toFixed(2) }} / day</p>
+                        <!-- <div class="flex flex-wrap gap-1 mb-2">
                             <el-tag type="info" size="small" v-for="t in related.type" :key="t">{{ t }}</el-tag>
                             <el-tag :type="related.category === 'standard' ? 'success' : 'warning'" size="small">
                                 {{ related.category }}
                             </el-tag>
-                        </div>
-                        <router-link :to="`/car/${related.name}`" class="text-primary hover:underline text-sm">
+                        </div> -->
+                        <router-link :to="`/car/${related.id}`" class="text-primary hover:underline text-sm">
                             View Details →
                         </router-link>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -156,14 +157,16 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
-import { getVehicleById } from "@/composables/vehicles";
+import { getVehicleById, getRelatedVehicles } from "@/composables/vehicles";
 const route = useRoute()
 const router = useRouter()
 const id = route.params.id
 const vehicle = ref(null)
+const relatedVehicles = ref([])
 
 onMounted(async () => {
     await getVehicleByIdData()
+    await getRelatedVehiclesData()
 })
 
 const getVehicleByIdData = async () => {
@@ -174,28 +177,17 @@ const getVehicleByIdData = async () => {
     })
 }
 
-
-
-
-
-// const car = computed(() => {
-//       return cars.find((c) => c.name === route.params.id)
-//     // return cars[0]
-// })
-
-// const relatedCars = computed(() =>
-//     cars.filter(
-//         (c) => c.name !== car.value?.name && c.category === car.value?.category
-//     )
-// )
-
-// const categoryColor = computed(() => {
-//     return car.value?.category === 'standard' ? 'success' : 'warning'
-// })
+const getRelatedVehiclesData = async () => {
+    await getRelatedVehicles(id).then((response) => {
+        relatedVehicles.value = response.data
+    }).catch((error) => {
+        console.log(error)
+    })
+}
 
 function handleReservation() {
     // alert(`Reserving ${car.value.name}`)
-    router.push(`/car/${vehicle.value.name}/reservation`)
+    router.push(`/car/${vehicle.value.id}/reservation`)
 }
 
 function handleContact() {
