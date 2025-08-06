@@ -101,4 +101,59 @@ export const updateUserById = async (id, data, token) => {
     throw error;
   }
 
-} 
+}
+
+export const getPaymentMethodsForUser = async (userId, token) => {
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const url = `/api/v1/users/${userId}/payment-methods`;
+  try {
+    const response = await axios.get(url, config);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error('Authentication expired');
+    }
+    throw error;
+  }
+
+}
+
+export const addPaymentMethod = async (userId, data, token) => {
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const url = `/api/v1/users/${userId}/payment-methods`;
+  try {
+    const response = await axios.post(url, data, config);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error('Authentication expired');
+    }
+    throw error;
+  }
+
+}
+
+export const saveNewAccount = async (data) => {
+  const value = await axios.post('/api/v1/auth/register', data);
+  return value;
+}

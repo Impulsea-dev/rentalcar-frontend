@@ -92,8 +92,12 @@ watch([selectedRole, selectedStatus, search], () => {
 
 
 const fetchUsers = async () => {
+    console.log(user.token);
+    
     await getUsers(currentPage.value, itemsPerPage.value, search.value, selectedStatus.value, selectedRole.value, user.token).then((response) => {
         users.value = response.users
+        console.log(users.value);
+        
         itemsPerPage.value = response.page_size
         totalUsers.value = response.total
     }).catch((error) => {

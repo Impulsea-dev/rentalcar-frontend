@@ -1,5 +1,6 @@
 <template>
     <div class="px-0 py-24 md:py-32 max-w-4xl mx-auto">
+        <span>{{ reservation }}</span>
         <el-steps :active="activeStep" finish-status="success" align-center class="custom-steps">
             <el-step v-if="activeStep === 0  || !isAuthenticated" title="User Information" />
             <el-step title="Location & Date" />
@@ -83,7 +84,9 @@ const reservation = reactive({
         expiry_month: 12,
         expiry_year: 2025,
         is_default: true,
-        cardholder_name: ''
+        cardholder_name: '',
+        card_number: '',
+
     },
     pickup_location_id: '',
     return_location_id: '',

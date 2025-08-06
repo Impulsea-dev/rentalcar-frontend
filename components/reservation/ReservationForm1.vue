@@ -10,16 +10,18 @@
             </el-form-item>
 
             <el-form-item label="Email" prop="customer_info.email">
-                <el-input v-model="modelValue.customer_info.email" type="email" placeholder="Enter your email" size="large" />
+                <el-input v-model="modelValue.customer_info.email" type="email" placeholder="Enter your email"
+                    size="large" />
             </el-form-item>
             <el-form-item label="Phone">
                 <template #label>
-                    <label class="text-sm text-gray-700 font-medium">
+                    <label class="text-sm text-gray-700 font-semibold">
                         <span class="text-red-500 mr-1">*</span>Phone
                     </label>
                 </template>
                 <div class="w-full">
-                    <MazPhoneNumberInput v-model="modelValue.customer_info.phone" v-model:country-code="phoneCountryCode"
+                    <MazPhoneNumberInput v-model="modelValue.customer_info.phone"
+                        v-model:country-code="phoneCountryCode"
                         :default-country-code="phoneCountryCode || detectedPhoneCountry" show-code-on-list
                         :no-use-browser-locale="false"
                         :preferred-countries="['US', 'CA', 'GB', 'AU', 'FR', 'DE', 'ES', 'IT']" :translations="{
@@ -36,12 +38,14 @@
                 </div>
             </el-form-item>
             <el-form-item label="Country" prop="customer_info.country">
-                <el-select v-model="modelValue.customer_info.country" placeholder="Select your country" size="large" filterable>
+                <el-select v-model="modelValue.customer_info.country" placeholder="Select your country" size="large"
+                    filterable>
                     <el-option v-for="country in countries" :key="country" :label="country" :value="country" />
                 </el-select>
             </el-form-item>
             <el-form-item label="License Number" prop="customer_info.license_number">
-                <el-input v-model="modelValue.customer_info.license_number" placeholder="Enter your license number" size="large" />
+                <el-input v-model="modelValue.customer_info.license_number" placeholder="Enter your license number"
+                    size="large" />
             </el-form-item>
             <el-form-item label="Payment Type" prop="payment_info.type">
                 <el-select v-model="modelValue.payment_info.type" placeholder="Select payment method" size="large">
@@ -61,18 +65,28 @@
             <el-form-item label="Cardholder Name" prop="payment_info.cardholder_name">
                 <el-input v-model="modelValue.payment_info.cardholder_name" placeholder="John Doe" size="large" />
             </el-form-item>
+            <el-form-item label="Card Number" prop="payment_info.card_number">
+                <el-input v-model="modelValue.payment_info.card_number" maxlength="19"
+                    placeholder="1234 5678 9012 3456" size="large" style="width: 100%;"
+                    oninput="this.value = this.value.replace(/[^0-9\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')" />
+            </el-form-item>
+
 
             <el-form-item label="Last 4 Digits" prop="payment_info.last_four">
                 <el-input v-model="modelValue.payment_info.last_four" maxlength="4" placeholder="1234" size="large" />
             </el-form-item>
 
-            <el-form-item label="Expiry Month">
+            <el-form-item label="Expiry Date">
+                <el-input v-model="expiryInput" placeholder="MM/YY" size="large" />
+            </el-form-item>
+
+            <!-- <el-form-item label="Expiry Month">
                 <el-input-number v-model="modelValue.payment_info.expiry_month" :min="1" :max="12" size="large" style="width: 100%;" />
             </el-form-item>
 
             <el-form-item label="Expiry Year">
                 <el-input-number v-model="modelValue.payment_info.expiry_year" :min="2024" :max="2040" size="large" style="width: 100%;" />
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
     </div>
 </template>
@@ -87,9 +101,44 @@ const formRef = ref(null)
 const phoneCountryCode = ref()
 const detectedPhoneCountry = ref('')
 const phoneDetectionMethod = ref('')
+const expiryInput = ref('')
+
+onMounted(() => {
+    const month = props.modelValue.payment_info.expiry_month || ''
+    const year = props.modelValue.payment_info.expiry_year || ''
+
+    if (month && year) {
+        const paddedMonth = String(month).padStart(2, '0')
+        const shortYear = String(year).slice(-2) // Solo los últimos dos dígitos
+        expiryInput.value = `${paddedMonth}/${shortYear}`
+    }
+})
+
+
+watch(expiryInput, (val) => {
+    const regex = /^(\d{1,2})\/(\d{2,4})$/
+    const match = val.match(regex)
+
+    if (match) {
+        let month = parseInt(match[1], 10)
+        let year = parseInt(match[2], 10)
+        if (month >= 1 && month <= 12) {
+            if (year < 100) {
+                year += 2000
+            }
+
+            if (year >= 2024 && year <= 2040) {
+                props.modelValue.payment_info.expiry_month = month
+                props.modelValue.payment_info.expiry_year = year
+            }
+        }
+    }
+})
+
+
 const rules = {
     'customer_info.name': [{ required: true, message: 'Name is required', trigger: 'blur' }],
-    'customer_info.email': [    
+    'customer_info.email': [
         { required: true, message: 'Email is required', trigger: 'blur' },
         { type: 'email', message: 'Must be a valid email', trigger: 'blur' }
     ],

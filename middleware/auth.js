@@ -1,11 +1,17 @@
 export default defineNuxtRouteMiddleware((to) => {
-  if (import.meta.server) return;
+  if (process.server) return;
+
   const userData = localStorage.getItem('auth');
   if (!userData) return navigateTo('/login');
 
   const user = JSON.parse(userData);
   const role = user.user.role;
-  
+
+  // Permitir acceso a rutas generales
+  const allowedGeneralPaths = ['/settings', '/preferences'];
+  if (allowedGeneralPaths.includes(to.path)) return;
+
+  // Redirección por roles
   if (role === 'admin' && !to.path.startsWith('/admin')) {
     return navigateTo('/admin');
   }

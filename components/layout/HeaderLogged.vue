@@ -52,9 +52,9 @@ const router = useRouter()
 const user = JSON.parse(localStorage.getItem('auth'))
 const name = user.user.profile.first_name + ' ' + user.user.profile.last_name
 const logout = () => {
-    localStorage.removeItem('auth')
-    router.push('/login')
-}  
+  localStorage.removeItem('auth')
+  window.location.href = '/login'
+}
 
 const goToDash = () => {
     router.push(`/${user.user.role}`)

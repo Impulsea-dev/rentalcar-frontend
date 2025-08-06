@@ -11,54 +11,34 @@
         <Transition name="modal-fade-slide">
             <div class="fixed left-1/2 top-0 transform -translate-x-1/2 w-[800px] bg-[#f5f8fa] h-[calc(100vh-4rem)] z-[1000] shadow-base3 rounded-xl mt-8 flex flex-col"
                 v-show="showModal">
-                                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
+                <div class="absolute top-4 right-4 hover:cursor-pointer z-[1001]" @click="closeModal">
                     <el-icon size="20" color="gray">
                         <CloseBold />
                     </el-icon>
                 </div>
-                <div class="py-10 flex flex-col flex-grow overflow-y-auto">
-                    <el-steps :active="activeStep" finish-status="success" align-center class="custom-steps">
-                        <el-step title="General" />
-                        <el-step title="Features" />
-                        <el-step title="Pricing" />
-                    </el-steps>
-                    <div class="mt-8 flex-grow px-4">
-                        <div v-if="activeStep === 0">
+                <div class="p-4 flex flex-col flex-grow overflow-y-auto">
+                    <el-tabs v-model="activeTab" class="flex-grow overflow-auto">
+                        <el-tab-pane label="General Info" name="general">
                             <GeneralForm v-model="vehicle" />
-                        </div>
-                        <div v-else-if="activeStep === 1">
+                        </el-tab-pane>
+                        <el-tab-pane label="Features" name="features">
                             <FeaturesForm v-model="vehicle" />
-                        </div>
-                        <div v-else-if="activeStep === 2">
+                        </el-tab-pane>
+                        <el-tab-pane label="Pricing" name="pricing">
                             <PricingForm v-model="vehicle" />
-                        </div>
-
-                        <!-- <div v-else-if="activeStep === 1">
-                            <LocationDate ref="locationDateRef" />
-
-                        </div>
-                        <div v-else-if="activeStep === 2">
-                            <ReservationComplete />
-                        </div> -->
-                    </div>
-
-                    <div class="mt-auto flex justify-between px-4">
-                        <button v-if="activeStep > 0" @click="prev" class="flex justify-center items-center gap-x-2 rounded-md px-4 py-2 text-sm bg-white text-black border border-black/50 transition-all
-                 duration-300">
-                            Go Back
+                        </el-tab-pane>
+                    </el-tabs>
+                    <div class="flex justify-end pt-4">
+                        <button @click="saveVehicle"
+                            class="flex justify-center items-center rounded-md px-4 py-2 text-sm bg-economy text-white transition-all duration-300 hover:opacity-60 gap-x-1">
+                            <el-icon v-if="isSaving" class="animate-spin" size="16">
+                                <Loading />
+                            </el-icon>
+                            <el-icon v-else size="16">
+                                <Plus />
+                            </el-icon>
+                            Save
                         </button>
-
-                        <div class="ml-auto">
-                            <button v-if="activeStep < totalSteps - 1" @click="next" class="flex justify-center items-center rounded-md px-4 py-2 text-sm bg-economy text-white transition-all
-                 duration-300 hover:opacity-60">
-                                Next
-                            </button>
-
-                            <button v-else @click="saveVehicle" class="flex justify-center items-center rounded-md px-4 py-2 text-sm bg-economy text-white transition-all
-                 duration-300 hover:opacity-60">
-                                Save Vehicle
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -70,13 +50,13 @@
     </div>
 </template>
 <script setup>
-import { Plus, CloseBold } from '@element-plus/icons-vue'
+import { Plus, CloseBold, Loading } from '@element-plus/icons-vue'
 import GeneralForm from './GeneralForm.vue';
 import FeaturesForm from './FeaturesForm.vue';
 import PricingForm from './PricingForm.vue';
 const showModal = ref(false)
-const activeStep = ref(0)
-const totalSteps = 3
+const isSaving = ref(false)
+const activeTab = ref('general')
 const vehicle = reactive({
     class: '',
     brand_name: '',
@@ -104,7 +84,7 @@ const vehicle = reactive({
     fuel_type: '',
     transmission: '',
     images: [],
-    plate:''
+    plate: ''
 })
 
 
@@ -118,19 +98,10 @@ const closeModal = () => {
     document.body.style.overflow = '';
 };
 
-const next = async () => {
-    if (activeStep.value < totalSteps - 1) {
-        activeStep.value++
-    }
-}
 
-const prev = () => {
-    if (activeStep.value > 0) {
-        activeStep.value--
-    }
-}
 
 const saveVehicle = async () => {
+    isSaving.value = true
     console.log('Saving vehicle', vehicle)
 }
 
