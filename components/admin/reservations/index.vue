@@ -116,8 +116,6 @@ onMounted(() => {
 const getReservationsData = async () => {
     await getReservations(currentPage.value, itemsPerPage.value, user.token).then((response) => {
         reservations.value = response
-        console.log(reservations.value);
-
         totalReservations.value = reservations.value.length - 1
     }).catch((error) => {
         console.log(error)

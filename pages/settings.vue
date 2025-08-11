@@ -1,12 +1,14 @@
 <template>
     <div class="max-w-7xl mx-auto py-32 px-4">
         <el-tabs v-model="activeTab" type="border-card" class="demo-tabs" v-if="Object.keys(user).length > 0"
-            style="height: 450px; overflow-y: auto;">
+            style="max-height: 450px; overflow-y: auto;">
+            <span>{{ isNewPayment }}</span>
             <el-tab-pane label="Personal Info" name="personal">
                 <PersonalInfoForm :user="user" />
             </el-tab-pane>
             <el-tab-pane label="Payment Info" name="payment">
-                <PaymentInfoForm :payment="payment" />
+                <PaymentInfoForm :payment="payment" :payments="payments" :key="payments"
+                    @change:isNewPayment="isNewPayment = $event" />
             </el-tab-pane>
             <el-tab-pane label="License Info" name="license">
                 <LicenseInfo :user="user" />
@@ -40,6 +42,7 @@ definePageMeta({
 })
 const auth = JSON.parse(localStorage.getItem('auth'))
 const activeTab = ref('personal')
+const isNewPayment = ref(false)
 const user = reactive({})
 const payment = reactive({
     cardholder_name: '',
@@ -49,10 +52,11 @@ const payment = reactive({
     is_default: true,
     provider: '',
     type: 'credit_card',
-    card_number:'',
+    card_number: '',
     cvv: ''
 
 })
+const payments = ref([])
 const isUpdating = ref(false)
 
 const getUserByIdData = async () => {
@@ -68,6 +72,9 @@ const getUserByIdData = async () => {
 const getPaymentMethods = async () => {
     await getPaymentMethodsForUser(auth.user.id, auth.token).then((response) => {
         console.log(response)
+        if (response.length > 0) {
+            payments.value = response
+        }
     }).catch((error) => {
         console.log(error)
     })
@@ -79,30 +86,33 @@ onMounted(async () => {
 })
 
 const saveChanges = async () => {
-    isUpdating.value = true 
-    console.log(payment);
-    
-    try {
-        await updateUserById(auth.user.id, user, auth.token)
-        await addPaymentMethod(auth.user.id, payment, auth.token)
+  isUpdating.value = true
+  console.log(payment);
+  
+  try {
+    await updateUserById(auth.user.id, user, auth.token)
 
-        ElNotification({
-            title: 'Success',
-            message: 'User information updated successfully',
-            type: 'success',
-            position: 'bottom-right'
-        })
-    } catch (error) {
-        console.error(error)
-        ElNotification({
-            title: 'Error',
-            message: error.response?.data?.error || 'Something went wrong',
-            type: 'error',
-            position: 'bottom-right'
-        })
-    } finally {
-        isUpdating.value = false
+    if (isNewPayment.value) {
+      await addPaymentMethod(auth.user.id, payment, auth.token)
     }
+
+    ElNotification({
+      title: 'Success',
+      message: 'User information updated successfully',
+      type: 'success',
+      position: 'bottom-right'
+    })
+  } catch (error) {
+    console.error(error)
+    ElNotification({
+      title: 'Error',
+      message: error.response?.data?.error || 'Something went wrong',
+      type: 'error',
+      position: 'bottom-right'
+    })
+  } finally {
+    isUpdating.value = false
+  }
 }
 
 </script>

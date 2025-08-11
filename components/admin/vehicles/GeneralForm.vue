@@ -4,8 +4,13 @@
       <el-input v-model="modelValue.class" placeholder="e.g. Economy" size="large" />
     </el-form-item>
     <el-form-item label="Brand Name" label-position="top">
-      <el-input v-model="modelValue.brand_name" placeholder="e.g. Toyota" size="large" />
+      <el-select v-model="modelValue.brand_name" placeholder="Select brand" size="large" style="width: 100%">
+        <el-option label="GWM" value="GWM" />
+        <el-option label="Hyundai" value="Hyundai" />
+        <el-option label="Ssangyong" value="Ssangyong" />
+      </el-select>
     </el-form-item>
+
     <el-form-item label="VIN" label-position="top">
       <el-input v-model="modelValue.vin" placeholder="e.g. 1A2B3C4D5E6F7G8H9I0J" size="large" />
     </el-form-item>
@@ -64,13 +69,13 @@ onMounted(() => {
       status: 'finished'
     }))
   }
- if (props.modelValue.thumbnail) {
-  thumbnailFileList.value = [{
-    name: 'thumbnail.jpg',
-    url: props.modelValue.thumbnail,
-    status: 'finished'
-  }]
-}
+  if (props.modelValue.thumbnail) {
+    thumbnailFileList.value = [{
+      name: 'thumbnail.jpg',
+      url: props.modelValue.thumbnail,
+      status: 'finished'
+    }]
+  }
 })
 
 

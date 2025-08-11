@@ -54,6 +54,7 @@ import { Plus, CloseBold, Loading } from '@element-plus/icons-vue'
 import GeneralForm from './GeneralForm.vue';
 import FeaturesForm from './FeaturesForm.vue';
 import PricingForm from './PricingForm.vue';
+import { createVehicle, addImagesToVehicle, addThumbnailToVehicle } from '@/composables/vehicles'
 const showModal = ref(false)
 const isSaving = ref(false)
 const activeTab = ref('general')
@@ -87,6 +88,7 @@ const vehicle = reactive({
     plate: ''
 })
 
+const userLogged = JSON.parse(localStorage.getItem('auth'))
 
 const openModal = () => {
     document.body.style.overflow = 'hidden';
@@ -102,8 +104,50 @@ const closeModal = () => {
 
 const saveVehicle = async () => {
     isSaving.value = true
-    console.log('Saving vehicle', vehicle)
+    const imagesToSend = {
+        images: vehicle.images
+            ? vehicle.images.filter(img => img.image.startsWith('data:image'))
+            : null
+    }
+    const thumbnailToSend = vehicle.thumbnail
+    const vehicleToSend = { ...vehicle }
+    delete vehicleToSend.images
+    delete vehicleToSend.thumbnail
+
+    try {
+        const response = await createVehicle(vehicleToSend, userLogged.token)
+        console.log(response)
+        const vehicleId = response?.id
+
+        if (!vehicleId) throw new Error('Vehicle ID not returned')
+
+        if (imagesToSend.images?.length) {
+            await addImagesToVehicle(vehicleId, imagesToSend, userLogged.token)
+        }
+
+        if (thumbnailToSend) {
+            await addThumbnailToVehicle(vehicleId, thumbnailToSend, userLogged.token)
+        }
+
+        ElNotification({
+            title: 'Success',
+            message: 'Vehicle created successfully',
+            type: 'success',
+            position: 'bottom-right'
+        })
+    } catch (error) {
+        console.error(error)
+        ElNotification({
+            title: 'Error',
+            message: error?.response?.data?.error || 'Something went wrong',
+            type: 'error',
+            position: 'bottom-right'
+        })
+    } finally {
+        isSaving.value = false
+    }
 }
+
 
 </script>
 <style scoped>
