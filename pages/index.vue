@@ -4,7 +4,7 @@
             <div class="flex flex-col h-full relative">
                 <h2
                     class="text-white pt-32 md:pt-40 text-4xl md:text-[48px] xl:text-[64px] font-bold tracking-in-expand-forward-bottom pb-4">
-                    Best Rental Car Service In Grand
+                    Best Rental Car Service In Grand Cayman
                 </h2>
                 <p class="text-white text-base md:text-lg lg:text-xl tracking-in-expand-forward-bottom">
                     From as low as $25 per day with limited time offer discounts
